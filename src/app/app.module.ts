@@ -22,7 +22,7 @@ import { AngularFireAuthGuard } from '@angular/fire/auth-guard';
 
 const firebaseUiAuthConfig: firebaseui.auth.Config = {
   signInFlow: 'popup',
-  signInSuccessUrl: 'home',
+  signInSuccessUrl: 'tab',
   signInOptions: [
     firebase.auth.GoogleAuthProvider.PROVIDER_ID,
     firebase.auth.FacebookAuthProvider.PROVIDER_ID,
