@@ -12,12 +12,20 @@ import { ProfiledbService } from '../profiledb.service'
 export class ProfilePage implements OnInit {
   changed: Boolean = true
 
+  name: string;
+  phonenumber: string;
+  username: string;
   profile$: Observable<User>;
 
-  constructor(
-    private userm: UsermgmtService,
-    private profiledb: ProfiledbService,
-  ) { this.profile$ = this.profiledb.getProfile(); }
+  constructor(private userm: UsermgmtService, private profiledb: ProfiledbService) {
+    this.profile$ = this.profiledb.getProfile();
+    this.profile$.subscribe(event => {
+      this.name = event.name;
+    });
+    this.profile$.subscribe(event => {
+      this.username = event.username;
+    });
+  }
 
   ngOnInit() {
   }
@@ -34,6 +42,5 @@ export class ProfilePage implements OnInit {
   }
 
   save() {
-
   }
 }

@@ -10,24 +10,11 @@ import { map } from 'rxjs/operators';
 })
 export class ProfiledbService {
 
-  private userId: string;
-  private name: string;
-  private username: string;
-  private profile: User;
-
   profile$: Observable<User>;
+  userId: string;
 
   constructor(private afAuth: AngularFireAuth, private db: AngularFirestore) {
     this.userId = this.afAuth.auth.currentUser.uid;
-    this.name = this.afAuth.auth.currentUser.displayName;
-    this.username = this.afAuth.auth.currentUser.email;
-    this.profile = {
-      username: this.username,
-      uid: this.userId,
-      phonenumber: null,
-      name: this.name,
-      host: false
-    };
   }
 
   addUser() {
@@ -35,7 +22,13 @@ export class ProfiledbService {
       ref.where('uid', '==', this.userId)).get()
       .subscribe(profile => {
         if (profile.empty) {
-          this.db.collection('profiles').add(this.profile);
+          this.db.collection('profiles').add({
+            username: this.afAuth.auth.currentUser.email,
+            uid: this.userId,
+            phonenumber: null,
+            name: this.afAuth.auth.currentUser.displayName,
+            host: false
+          });
           console.log('profile added!, ' + this.userId);
         } else {
           console.log('profile existed!, ' + this.userId);
@@ -56,7 +49,7 @@ export class ProfiledbService {
   }
 
   getDisplayName() {
-    return this.name;
+    return "no name";
   }
 
 }
