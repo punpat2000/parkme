@@ -17,6 +17,8 @@ object-fit: cover;
 display: block;
 border-radius: 50%;
 position: absolute;
+margin-left: auto;
+margin-right: auto;
 bottom: calc(-1*(80px + 4px));
 //border: 2px solid #000;
 background-color: #fff;
