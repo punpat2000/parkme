@@ -2,7 +2,7 @@
   <ion-toolbar>
       <ion-title>Profile</ion-title>
       <ion-buttons slot="primary">
-          <ion-button disabled={{changed}}>Save</ion-button>
+          <ion-button disabled={{changed}} (click)="save()">Save</ion-button>
       </ion-buttons>
     </ion-toolbar>
   </ion-header>     
@@ -19,7 +19,7 @@
   <div *ngIf="profile$ | async as pf">
     <ion-item>
         <ion-label position="floating" color="medium">Name</ion-label>
-        <ion-input (ngModelChange)="enableSave($event)" value={{pf.name}}></ion-input>
+        <ion-input [ngModel]="pf.name" (ngModelChange)="enableSave($event)"></ion-input>
     </ion-item>
     <ion-item>
         <ion-label position="floating" color="medium">Phone Number</ion-label>
