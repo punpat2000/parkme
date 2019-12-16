@@ -10,21 +10,19 @@ import { ProfiledbService } from '../profiledb.service'
   styleUrls: ['./profile.page.scss'],
 })
 export class ProfilePage implements OnInit {
-  name: String
-  changed: Boolean=true
+  changed: Boolean = true
 
   profile$: Observable<User>;
 
   constructor(
     private userm: UsermgmtService,
-    private profile: ProfiledbService,
-  ) { }
+    private profiledb: ProfiledbService,
+  ) { this.profile$ = this.profiledb.getProfile(); }
 
   ngOnInit() {
-    this.name = this.profile.getDisplayName()
   }
-  getProfile(){
-    this.profile.getProfile();
+  getProfile() {
+    this.profile$ = this.profiledb.getProfile();
   }
 
   logout() {
@@ -36,6 +34,6 @@ export class ProfilePage implements OnInit {
   }
 
   save() {
-    
+
   }
 }
