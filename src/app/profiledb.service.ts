@@ -31,8 +31,8 @@ export class ProfiledbService {
   addUser() {
     this.db.collection('profiles', ref =>
       ref.where('uid', '==', this.userId)).get()
-      .subscribe(snapshot => {
-        if (snapshot.empty) {
+      .subscribe(profile => {
+        if (profile.empty) {
           this.db.collection('profiles').add(this.profile);
           console.log('profile added!, '+this.userId);
         } else {
