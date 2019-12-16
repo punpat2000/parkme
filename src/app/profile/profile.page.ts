@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AngularFireAuth } from '@angular/fire/auth';
 
 @Component({
   selector: 'app-profile',
@@ -7,9 +8,16 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ProfilePage implements OnInit {
 
-  constructor() { }
+  constructor(
+    private afAuth: AngularFireAuth
+  ) { }
 
   ngOnInit() {
   }
-
+  
+  logout() {
+    this.afAuth.auth.signOut().then(() => {
+      location.reload();
+    })
+  }
 }
