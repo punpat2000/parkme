@@ -20,6 +20,8 @@ import { AngularFireAuthModule } from '@angular/fire/auth';
 
 import { AngularFireAuthGuard } from '@angular/fire/auth-guard';
 
+//import { GoogleMaps } from '@ionic-native/google-maps';
+
 const firebaseUiAuthConfig: firebaseui.auth.Config = {
   signInFlow: 'popup',
   signInSuccessUrl: 'tab',
@@ -48,7 +50,8 @@ const firebaseUiAuthConfig: firebaseui.auth.Config = {
     StatusBar,
     SplashScreen,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
-    AngularFireAuthGuard
+    AngularFireAuthGuard,
+    //GoogleMaps
   ],
   bootstrap: [AppComponent]
 })
