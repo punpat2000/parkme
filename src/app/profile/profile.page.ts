@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { UsermgmtService } from '../usermgmt.service'
+import { Observable } from 'rxjs';
+import { User } from '../../models/user.model'
+import { ProfiledbService } from '../profiledb.service'
 
 @Component({
   selector: 'app-profile',
@@ -8,11 +11,17 @@ import { UsermgmtService } from '../usermgmt.service'
 })
 export class ProfilePage implements OnInit {
 
+  profile$: Observable<User>;
+
   constructor(
-    private userm: UsermgmtService
+    private userm: UsermgmtService,
+    private profiledb: ProfiledbService
   ) { }
 
   ngOnInit() {
+  }
+  getProfile(){
+    this.profiledb.getProfile();
   }
 
   logout() {
