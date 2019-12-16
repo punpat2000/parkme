@@ -9,7 +9,7 @@ import { ProfiledbService } from '../profiledb.service';
 })
 export class ProfilePage implements OnInit {
   name: String
-  change: Boolean
+  changed: Boolean=true
 
   constructor(
     private userm: UsermgmtService,
@@ -22,6 +22,10 @@ export class ProfilePage implements OnInit {
 
   logout() {
     this.userm.logout();
+  }
+
+  enableSave() {
+    this.changed = false
   }
 
   save() {

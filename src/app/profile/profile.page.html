@@ -18,7 +18,7 @@
   </div>
   <ion-item>
       <ion-label position="floating" color="medium">Name</ion-label>
-      <ion-input [(ngModel)]="name" value={{name}}></ion-input>
+      <ion-input [(ngModel)]="name" (ngModelChange)="enableSave($event)" value={{name}}></ion-input>
   </ion-item>
   <ion-item>
       <ion-label position="floating" color="medium">Phone Number</ion-label>
