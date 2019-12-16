@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AngularFireAuth } from '@angular/fire/auth';
+import { UsermgmtService } from '../usermgmt.service'
 
 @Component({
   selector: 'app-profile',
@@ -9,15 +9,13 @@ import { AngularFireAuth } from '@angular/fire/auth';
 export class ProfilePage implements OnInit {
 
   constructor(
-    private afAuth: AngularFireAuth
+    private userm: UsermgmtService
   ) { }
 
   ngOnInit() {
   }
-  
+
   logout() {
-    this.afAuth.auth.signOut().then(() => {
-      location.reload();
-    })
+    this.userm.logout();
   }
 }

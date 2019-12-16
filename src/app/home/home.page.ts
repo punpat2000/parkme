@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
-import { UsermgmtService} from '../usermgmt.service'
-import { AngularFireAuth } from '@angular/fire/auth';
+
 
 @Component({
   selector: 'app-home',
@@ -9,13 +8,9 @@ import { AngularFireAuth } from '@angular/fire/auth';
 })
 export class HomePage {
 
-  constructor(private afAuth: AngularFireAuth, private userm: UsermgmtService
+  constructor(
   ) {}
   
   ngOnInit() {
-  }
-
-  logout() {
-    this.userm.logout();
   }
 }
