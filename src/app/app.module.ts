@@ -20,6 +20,8 @@ import { AngularFireAuthModule } from '@angular/fire/auth';
 
 import { AngularFireAuthGuard } from '@angular/fire/auth-guard';
 
+import { AngularFirestore, AngularFirestoreModule } from '@angular/fire/firestore';
+
 const firebaseUiAuthConfig: firebaseui.auth.Config = {
   signInFlow: 'popup',
   signInSuccessUrl: 'tab',
@@ -42,14 +44,15 @@ const firebaseUiAuthConfig: firebaseui.auth.Config = {
     AppRoutingModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireAuthModule,
-    FirebaseUIModule.forRoot(firebaseUiAuthConfig)
+    FirebaseUIModule.forRoot(firebaseUiAuthConfig),
+    AngularFirestoreModule
   ],
   providers: [
     StatusBar,
     SplashScreen,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
-    AngularFireAuthGuard
-  ],
+    AngularFireAuthGuard,
+    AngularFirestore],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

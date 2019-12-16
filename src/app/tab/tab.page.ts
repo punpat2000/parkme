@@ -1,5 +1,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { IonTabs } from '@ionic/angular';
+import { AngularFireAuth } from '@angular/fire/auth';
+
+import { ProfiledbService } from '../profiledb.service'
 
 @Component({
   selector: 'app-tab',
@@ -7,11 +10,13 @@ import { IonTabs } from '@ionic/angular';
   styleUrls: ['./tab.page.scss'],
 })
 export class TabPage implements OnInit {
- // @ViewChild('tab',{static :true}) tab:IonTabs
-  constructor() { }
+
+  constructor(private profiledb: ProfiledbService) {
+  }
 
   ngOnInit() {
-   // this.tab.select('profile');
+    this.profiledb.addUser();
+    console.log('Welcome ' + this.profiledb.getDisplayName() + '!');
   }
 
 }
