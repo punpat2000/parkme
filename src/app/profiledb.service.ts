@@ -11,7 +11,7 @@ import { AlertController } from '@ionic/angular'
 })
 export class ProfiledbService {
 
-  profile$: Observable<User>;
+  //profile$: Observable<User>;
   userId: string;
   name: string;
 
@@ -58,7 +58,7 @@ export class ProfiledbService {
     }
   }
   getProfile() {
-    this.profile$ = this.db.collection<User>('profiles', ref => ref.where('uid', '==', this.userId)).valueChanges()
+    return this.db.collection<User>('profiles', ref => ref.where('uid', '==', this.userId)).valueChanges()
       .pipe(
         map(profiles => {
           const profile = profiles[0];
@@ -66,7 +66,7 @@ export class ProfiledbService {
           return profile;
         })
       );
-    return this.profile$;
+    //return this.profile$;
   }
 
 }

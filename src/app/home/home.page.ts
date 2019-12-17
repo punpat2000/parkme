@@ -28,6 +28,9 @@ export class HomePage {
   ngOnInit() {
     this.displayCarpark();
   }
+  sliderConfig(){
+    
+  }
 
   displayCarpark(){
     database().ref('lots').on('value', resp =>{
