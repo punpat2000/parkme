@@ -3,7 +3,7 @@ import { UsermgmtService } from '../usermgmt.service'
 import { Observable } from 'rxjs';
 import { User } from '../../models/user.model'
 import { ProfiledbService } from '../profiledb.service'
-import { AngularFireStorage, AngularFireUploadTask } from '@angular/fire/storage';
+import { AngularFireStorage } from '@angular/fire/storage';
 
 @Component({
   selector: 'app-profile',
@@ -17,15 +17,16 @@ export class ProfilePage implements OnInit {
   name: string;
   phonenumber: string;
   username: string;
+  url: string;
   profile$: Observable<User>;
-
-  task: AngularFireUploadTask;
 
   constructor(private userm: UsermgmtService, private profiledb: ProfiledbService, private storage: AngularFireStorage) {
     this.profile$ = this.profiledb.getProfile();
     this.setName();
-    this.setPhonenumber(); 
+    this.setPhonenumber();
+    this.setURL();
   }
+
   setName(){
     this.profile$.subscribe(event => {
       this.name = event.name;
@@ -36,6 +37,12 @@ export class ProfilePage implements OnInit {
   setPhonenumber(){
     this.profile$.subscribe(event => {
       this.phonenumber = event.phonenumber;
+    });
+  }
+
+  setURL() {
+    this.profile$.subscribe(event => {
+      this.url = event.url;
     });
   }
 
@@ -51,7 +58,7 @@ export class ProfilePage implements OnInit {
   }
 
   async save() {
-    await this.profiledb.updateProfile(this.name,this.phonenumber);
+    await this.profiledb.updateProfile(this.name,this.phonenumber, this.url);
     console.log('back to save');
     this.notChanged = true;
   }
@@ -60,7 +67,7 @@ export class ProfilePage implements OnInit {
     this.upload = true
   }
 
-  uploadFile(event: FileList) { 
+  uploadFile(event: FileList) {
     // The File object
     const file = event.item(0)
  
@@ -71,6 +78,13 @@ export class ProfilePage implements OnInit {
     }
 
     const path = `profilepictures/${new Date().getTime()}_${file.name}`;
-    this.task = this.storage.upload(path, file)
+    this.storage.upload(path, file).then(() => {
+      const fileRef = this.storage.ref(path);
+      fileRef.getDownloadURL().subscribe(url => {
+        this.url = url;})
+    })
+
+    this.upload = false;
+    this.enableSave();
   }
 }
