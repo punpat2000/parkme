@@ -44,6 +44,8 @@ export class ProfiledbService {
     await alert.present();
   }
 
+
+
   async updateProfile(name: string, phonenumber: string) {
     if (name.length > 0) {
       await this.db.collection('profiles').doc(this.userId).update({ name: name, phonenumber: phonenumber });
