@@ -14,7 +14,17 @@
         <img src="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y" alt="">
       </div>
     </div>
-    <ion-button expand="block" size="small" fill="clear">edit</ion-button>
+    <ion-button expand="block" size="small" fill="clear" (click)="enableUpload()">edit</ion-button>
+    <div *ngIf="upload">
+      <div class="fileUpload btn btn-primary">
+        <input
+          id="uploadBtn"
+          type="file"
+          class="upload"
+          (change)="uploadFile($event.target.files)"
+        />
+      </div>
+    </div>
   </div>
   <div *ngIf="profile$ | async as pf">
     <ion-item>

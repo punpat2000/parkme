@@ -3,6 +3,7 @@ import { UsermgmtService } from '../usermgmt.service'
 import { Observable } from 'rxjs';
 import { User } from '../../models/user.model'
 import { ProfiledbService } from '../profiledb.service'
+import { AngularFireStorage, AngularFireUploadTask } from '@angular/fire/storage';
 
 @Component({
   selector: 'app-profile',
@@ -11,13 +12,16 @@ import { ProfiledbService } from '../profiledb.service'
 })
 export class ProfilePage implements OnInit {
   notChanged: Boolean = true
+  upload: boolean = false
 
   name: string;
   phonenumber: string;
   username: string;
   profile$: Observable<User>;
 
-  constructor(private userm: UsermgmtService, private profiledb: ProfiledbService) {
+  task: AngularFireUploadTask;
+
+  constructor(private userm: UsermgmtService, private profiledb: ProfiledbService, private storage: AngularFireStorage) {
     this.profile$ = this.profiledb.getProfile();
     this.setName();
     this.setPhonenumber(); 
@@ -50,5 +54,25 @@ export class ProfilePage implements OnInit {
     await this.profiledb.updateProfile(this.name,this.phonenumber);
     console.log('back to save');
     this.notChanged = true;
+  }
+
+  enableUpload() {
+    this.upload = true
+  }
+
+  uploadFile(event: FileList) {
+    
+ 
+    // The File object
+    const file = event.item(0)
+ 
+    // Validation for Images Only
+    if (file.type.split('/')[0] !== 'image') { 
+     console.error('unsupported file type :( ')
+     return;
+    }
+
+    const path = `profilepictures/${new Date().getTime()}_${file.name}`;
+    this.task = this.storage.upload(path, file)
   }
 }
