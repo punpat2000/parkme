@@ -60,9 +60,7 @@ export class ProfilePage implements OnInit {
     this.upload = true
   }
 
-  uploadFile(event: FileList) {
-    
- 
+  uploadFile(event: FileList) { 
     // The File object
     const file = event.item(0)
  

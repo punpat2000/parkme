@@ -1,7 +1,7 @@
 <ion-header>
   <ion-toolbar>
     <ion-title text-center>
-      Park Me
+      Welcome, {{displayname}}!
     </ion-title>
   </ion-toolbar>
 </ion-header>
@@ -13,9 +13,8 @@
         <ion-label  position="floating">E-mail</ion-label>
         <ion-input type="text" value=""></ion-input>
       </ion-item>
-      <ion-item>
-        <ion-label  position="floating">Password</ion-label>
-        <ion-input type="text" value=""></ion-input>
+      <ion-item *ngFor="let lot of lots">
+        <ion-label>Host: {{lot.host}}   Status: {{lot.status}}  Date: {{lot.Date}}</ion-label>
       </ion-item>
     </ion-list>
     <ion-row>
