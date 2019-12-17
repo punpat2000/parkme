@@ -11,7 +11,7 @@
   <div class="card">
     <div class="header">
       <div class="avatar">
-        <img [src]="url" />
+        <img *ngIf="url" [src]="url" />
       </div>
     </div>
     <ion-button expand="block" size="small" fill="clear" (click)="enableUpload()">edit</ion-button>
