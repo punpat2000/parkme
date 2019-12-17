@@ -19,15 +19,14 @@
   <div *ngIf="profile$ | async as pf">
     <ion-item>
         <ion-label position="floating" color="medium">Name</ion-label>
-        <ion-input [ngModel]="name" (ngModelChange)="enableSave($event)"></ion-input>
+        <ion-input [(ngModel)]="name" (ngModelChange)="enableSave($event)"></ion-input>
     </ion-item>
     <ion-item>
         <ion-label position="floating" color="medium">Phone Number</ion-label>
-        <ion-input value={{pf.phonenumber}}></ion-input>
+        <ion-input [(ngModel)]="phonenumber" (ngModelChange)="enableSave($event)" type="tel"></ion-input>
     </ion-item>
     <ion-item>
-        <ion-label position="floating" color="medium">Email</ion-label>
-        <ion-input [ngModel]="username"></ion-input>
+        <ion-label color="dark">{{pf.username}}</ion-label>
     </ion-item>
   </div>
   <ion-col> 

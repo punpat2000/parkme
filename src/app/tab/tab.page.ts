@@ -1,7 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { IonTabs } from '@ionic/angular';
-import { AngularFireAuth } from '@angular/fire/auth';
-
+import { Component, OnInit } from '@angular/core';
 import { ProfiledbService } from '../profiledb.service'
 
 @Component({
@@ -11,12 +8,11 @@ import { ProfiledbService } from '../profiledb.service'
 })
 export class TabPage implements OnInit {
 
-  constructor(private profiledb: ProfiledbService) {
-  }
+  constructor(private profiledb: ProfiledbService) {}
 
   ngOnInit() {
-    this.profiledb.addUser();
-    console.log('Welcome ' + this.profiledb.getDisplayName() + '!');
+    //this.profiledb.addUser();
+    console.log('Welcome!');
   }
 
 }

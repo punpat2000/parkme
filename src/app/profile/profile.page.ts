@@ -19,18 +19,23 @@ export class ProfilePage implements OnInit {
 
   constructor(private userm: UsermgmtService, private profiledb: ProfiledbService) {
     this.profile$ = this.profiledb.getProfile();
+    this.setName();
+    this.setPhonenumber(); 
+  }
+  setName(){
     this.profile$.subscribe(event => {
       this.name = event.name;
     });
+    console.log(this.name + ' @setname');
+  }
+
+  setPhonenumber(){
     this.profile$.subscribe(event => {
-      this.username = event.username;
+      this.phonenumber = event.phonenumber;
     });
   }
 
   ngOnInit() {
-  }
-  getProfile() {
-    this.profile$ = this.profiledb.getProfile();
   }
 
   logout() {
@@ -38,9 +43,11 @@ export class ProfilePage implements OnInit {
   }
 
   enableSave() {
-    this.changed = false
+    this.changed = false;
   }
 
-  save() {
+  async save() {
+    await this.profiledb.updateProfile(this.name,this.phonenumber);
+    console.log('back to save');
   }
 }

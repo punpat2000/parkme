@@ -9,8 +9,8 @@ export class UsermgmtService {
   constructor(private afAuth: AngularFireAuth) { }
 
   logout() {
-    console.log('logout')
     this.afAuth.auth.signOut().then(() => {
+      console.log('logout!')
       location.reload();
     })
   }
