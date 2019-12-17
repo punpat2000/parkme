@@ -4,4 +4,5 @@ export interface User {
     name: string;
     phonenumber: string;
     host: boolean;
+    url: string;
 }

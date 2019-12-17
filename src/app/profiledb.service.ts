@@ -26,7 +26,8 @@ export class ProfiledbService {
             uid: this.userId,
             phonenumber: '',
             name: this.afAuth.auth.currentUser.displayName,
-            host: false
+            host: false,
+            url: ''
           });
           console.log('profile added!, ' + this.userId);
         } else {
