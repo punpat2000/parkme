@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import {CarparkdbService} from '../carparkdb.service'
 
 
 @Component({
@@ -8,9 +9,12 @@ import { Component } from '@angular/core';
 })
 export class HomePage {
 
-  constructor(
+  constructor(private carparkdb: CarparkdbService
   ) {}
   
   ngOnInit() {
+  }
+  addCarpark(){
+    this.carparkdb.addCarpark();
   }
 }
