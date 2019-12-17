@@ -10,7 +10,7 @@ import { ProfiledbService } from '../profiledb.service'
   styleUrls: ['./profile.page.scss'],
 })
 export class ProfilePage implements OnInit {
-  changed: Boolean = true
+  notChanged: Boolean = true
 
   name: string;
   phonenumber: string;
@@ -43,11 +43,12 @@ export class ProfilePage implements OnInit {
   }
 
   enableSave() {
-    this.changed = false;
+    this.notChanged = false;
   }
 
   async save() {
     await this.profiledb.updateProfile(this.name,this.phonenumber);
     console.log('back to save');
+    this.notChanged = true;
   }
 }

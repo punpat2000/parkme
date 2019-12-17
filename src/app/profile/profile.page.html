@@ -2,7 +2,7 @@
   <ion-toolbar>
       <ion-title>Profile</ion-title>
       <ion-buttons slot="primary">
-          <ion-button disabled={{changed}} (click)="save()">Save</ion-button>
+          <ion-button disabled={{notChanged}} (click)="save()">Save</ion-button>
       </ion-buttons>
     </ion-toolbar>
   </ion-header>     
@@ -26,7 +26,8 @@
         <ion-input [(ngModel)]="phonenumber" (ngModelChange)="enableSave($event)" type="tel"></ion-input>
     </ion-item>
     <ion-item>
-        <ion-label color="dark">{{pf.username}}</ion-label>
+        <ion-label position="floating" color="dark">Email</ion-label>
+        <ion-input value={{pf.username}} disabled=true></ion-input>
     </ion-item>
   </div>
   <ion-col> 
