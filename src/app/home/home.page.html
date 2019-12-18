@@ -18,14 +18,14 @@
             <ion-label>Location: {{lot.location}}</ion-label>
           </ion-card-title>
           <ion-label>
-            status: {{lot.status}}
+            {{lot.comment}}
           </ion-label>
           <img *ngIf="lot.url" [src]="lot.url" />
-          <ion-button *ngIf="!lot.user===user && !lot.status; else notuser" color="light" expand="full" >booked</ion-button>
+          <ion-button *ngIf="(!lot.status && !(lot.user===this.user)); else notuser" color="light" expand="full">booked</ion-button>
           <ng-template #notuser>
-            <ion-button expand="full" *ngIf="lot.status; else reserved" color="success" (click)="bookCarpark(lot.key)">
+            <ion-button expand="full" *ngIf="lot.status; else booked" color="success" (click)="bookCarpark(lot.key)">
               Book</ion-button>
-            <ng-template #reserved>
+            <ng-template #booked>
               <ion-button expand="full" color="danger" (click)="unbookCarpark(lot.key)">Unbook</ion-button>
             </ng-template>
           </ng-template>

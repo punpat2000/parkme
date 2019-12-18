@@ -11,9 +11,9 @@ import { ProfiledbService } from '../profiledb.service'
 })
 export class HomePage {
 
-  lots = [];
-  displayname: string;
-  user: string;
+  private lots = [];
+  private displayname: string;
+  private user: string;
 
   constructor(private carparkdb: CarparkdbService, private profiledb: ProfiledbService
   ) {
@@ -31,7 +31,7 @@ export class HomePage {
     this.displayCarpark();
   }
   sliderConfig = {
-    slidesPerView: 1.3,
+    slidesPerView: 1,
     centeredSlides: true,
     spaceBetween: 20,
     coverflowEffect: {
