@@ -35,5 +35,6 @@
         />
       </div>
     </div>
-  <ion-button expand="block" shape="round" (click)="addCarpark()">Register as Host</ion-button>
+  <ion-button *ngIf="edit==false" expand="block" shape="round" (click)="addCarpark()">Register as Host</ion-button>
+  <ion-button *ngIf="edit" expand="block" shape="round" (click)="editCarpark()">Save edit</ion-button>
 </ion-content>

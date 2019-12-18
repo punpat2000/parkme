@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { CarparkdbService } from '../carparkdb.service'
-import { database } from 'firebase'
 import { ProfiledbService } from '../profiledb.service'
 import { User } from '../../models/user.model'
+import { database } from 'firebase'
 import { Observable } from 'rxjs';
 import { AngularFireStorage } from '@angular/fire/storage';
 
@@ -13,14 +13,24 @@ import { AngularFireStorage } from '@angular/fire/storage';
 })
 export class HostPage implements OnInit {
   profile$: Observable<User>;
+  userID: string;
   location: string;
   comment: string;
   url: string;
+  key: string;
   upload: boolean=false;
   uploading: boolean=false;
+  edit: boolean=false;
 
   constructor(private carparkdb: CarparkdbService, private profiledb: ProfiledbService, private storage: AngularFireStorage) {
     this.profile$ = this.profiledb.getProfile();
+    this.profile$.subscribe(resp => {
+      this.userID = resp.uid;
+      if (resp.host) {
+        this.edit = true;
+        this.getCarpark();
+      }
+    })
   }
 
   ngOnInit() {
@@ -28,6 +38,24 @@ export class HostPage implements OnInit {
 
   addCarpark() {
     this.carparkdb.addCarpark(this.location, this.comment, this.url);
+  }
+
+  getCarpark() {
+    database().ref('lots').on('value', resp => {
+      if (resp) {
+        resp.forEach(childSnapshot => {
+          const lot = childSnapshot.val();
+          if (lot.host === this.userID) {
+            this.location = lot.location;
+            this.comment = lot.comment;
+            this.url = lot.url;
+            this.key = lot.key;
+          }
+        })
+      } else {
+        console.log('error')
+      }
+    });
   }
 
   enableRegister() {
@@ -60,5 +88,9 @@ export class HostPage implements OnInit {
     })
 
     this.upload = false;
+  }
+
+  editCarpark() {
+    database().ref('/lots/'+this.key).update({location: this.location, comment: this.comment, url: this.url});
   }
 }

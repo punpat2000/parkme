@@ -9,19 +9,20 @@ import { database } from 'firebase';
   providedIn: 'root'
 })
 export class CarparkdbService {
-  constructor(private profiledb: ProfiledbService) { }
+  constructor(private profiledb: ProfiledbService, private db: AngularFirestore) { }
 
   addCarpark(location: string, comment: string, url: string) {
     const newData = database().ref('/lots').push();
     newData.set({
       host: this.profiledb.getId(),
       user: "",
-      status: false,
+      status: true,
       location: location,
       comment: comment,
       url: url,
       date: Date()
     });
+    this.db.collection('profiles').doc(this.profiledb.getId()).update({host: true})
     console.log('addcarpark succeeded')
     //this.scroll();
   }
