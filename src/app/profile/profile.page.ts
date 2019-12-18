@@ -14,7 +14,6 @@ export class ProfilePage implements OnInit {
   notChanged: Boolean = true
   upload: boolean = false
   uploading: boolean = false
-  range: string = "100"
 
   name: string;
   phonenumber: string;
@@ -80,7 +79,6 @@ export class ProfilePage implements OnInit {
     }
 
     this.uploading = true;
-    this.range = "50";
 
     const path = `profilepictures/${new Date().getTime()}_${file.name}`;
     this.storage.upload(path, file).then(() => {
@@ -89,7 +87,6 @@ export class ProfilePage implements OnInit {
         this.url = url;
         this.uploading = false;
         this.enableSave();
-        this.range = "100";
       })
     })
 

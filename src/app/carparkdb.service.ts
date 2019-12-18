@@ -11,15 +11,16 @@ import { database } from 'firebase';
 export class CarparkdbService {
   constructor(private profiledb: ProfiledbService) { }
 
-  addCarpark() {
+  addCarpark(location: string, comment: string, url: string) {
     const newData = database().ref('/lots').push();
     newData.set({
-      host: 'test',
-      user: 'test',
-      status: true,
-      location: '',
-      comment: '',
-      Date: Date()
+      host: this.profiledb.getId(),
+      user: "",
+      status: false,
+      location: location,
+      comment: comment,
+      url: url,
+      date: Date()
     });
     console.log('addcarpark succeeded')
     //this.scroll();

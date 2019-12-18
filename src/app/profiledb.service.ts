@@ -12,7 +12,7 @@ import { AlertController } from '@ionic/angular'
 export class ProfiledbService {
 
   //profile$: Observable<User>;
-  userId: string;
+  private userId: string;
   name: string;
 
   constructor(private afAuth: AngularFireAuth, private db: AngularFirestore, private alertController: AlertController) {
@@ -67,6 +67,9 @@ export class ProfiledbService {
         })
       );
     //return this.profile$;
+  }
+  getId(){
+    return this.userId;
   }
 
 }

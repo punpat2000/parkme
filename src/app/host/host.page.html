@@ -4,6 +4,36 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
-
+<ion-content padding>
+  <div *ngIf="profile$ | async as pf">
+    <ion-item>
+      <ion-label position="floating" color="medium">Host Name</ion-label>
+      <ion-input value={{pf.name}} disabled=true></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label position="floating" color="medium">Phone Number</ion-label>
+      <ion-input value={{pf.phonenumber}} disabled=true type="tel"></ion-input>
+    </ion-item>
+  </div>
+  <ion-item>
+      <ion-label position="floating" color="medium">Location</ion-label>
+      <ion-input [(ngModel)]="location" (ngModelChange)="enableRegister($event)" required=true></ion-input>
+  </ion-item>
+  <ion-item>
+      <ion-label position="floating" color="medium">Description</ion-label>
+      <ion-textarea [(ngModel)]="comment" placeholder="Please enter information about your location here." autoGrow=true required=true></ion-textarea>
+  </ion-item>
+  <img *ngIf="url" [src]="url"/>
+  <ion-button fill="clear" expand="full" (click)="enableUpload()">Upload Location Photo</ion-button>
+  <div *ngIf="upload">
+      <div class="fileUpload btn btn-primary">
+        <input
+          id="uploadBtn"
+          type="file"
+          class="upload"
+          (change)="uploadFile($event.target.files)"
+        />
+      </div>
+    </div>
+  <ion-button expand="block" shape="round" (click)="addCarpark()">Register as Host</ion-button>
 </ion-content>
