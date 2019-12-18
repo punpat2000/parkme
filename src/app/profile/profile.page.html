@@ -1,54 +1,50 @@
 <ion-header translucent>
   <ion-toolbar>
-      <ion-title>Profile</ion-title>
-      <ion-buttons slot="primary">
-          <ion-button disabled={{notChanged}} (click)="save()">Save</ion-button>
-      </ion-buttons>
-    </ion-toolbar>
-  </ion-header>     
+    <ion-title>Profile</ion-title>
+    <ion-buttons slot="primary">
+      <ion-button disabled={{notChanged}} (click)="save()">Save</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
 
-<div *ngIf="uploading" id='dim_wrapper' style='width:100%; height:100%; background:#000; z-index:10; position: fixed; opacity: 0.5'>&nbsp;</div>
+<div *ngIf="uploading" id='dim_wrapper'
+  style='width:100%; height:100%; background:#000; z-index:10; position: fixed; opacity: 0.5'>&nbsp;</div>
 <script>
-$("#dim_wrapper").animate({
-    'opacity':0.5
-});
+  $("#dim_wrapper").animate({
+    'opacity': 0.4
+  });
 </script>
 
 <ion-content padding>
   <div class="card">
     <div class="header">
       <div class="avatar">
-        <img *ngIf="url" [src]="url"/>
+        <img *ngIf="url" [src]="url" />
         <ion-spinner *ngIf="uploading"></ion-spinner>
       </div>
     </div>
     <ion-button expand="block" size="small" fill="clear" (click)="enableUpload()">edit</ion-button>
     <div *ngIf="upload">
       <div class="fileUpload btn btn-primary">
-        <input
-          id="uploadBtn"
-          type="file"
-          class="upload"
-          (change)="uploadFile($event.target.files)"
-        />
+        <input id="uploadBtn" type="file" class="upload" (change)="uploadFile($event.target.files)" />
       </div>
     </div>
   </div>
   <div *ngIf="profile$ | async as pf">
     <ion-item>
-        <ion-label position="floating" color="medium">Name</ion-label>
-        <ion-input [(ngModel)]="name" (ngModelChange)="enableSave($event)"></ion-input>
+      <ion-label position="floating" color="medium">Name</ion-label>
+      <ion-input [(ngModel)]="name" (ngModelChange)="enableSave($event)"></ion-input>
     </ion-item>
     <ion-item>
-        <ion-label position="floating" color="medium">Phone Number</ion-label>
-        <ion-input [(ngModel)]="phonenumber" (ngModelChange)="enableSave($event)" type="tel"></ion-input>
+      <ion-label position="floating" color="medium">Phone Number</ion-label>
+      <ion-input [(ngModel)]="phonenumber" (ngModelChange)="enableSave($event)" type="tel"></ion-input>
     </ion-item>
     <ion-item>
-        <ion-label position="floating" color="dark">Email</ion-label>
-        <ion-input value={{pf.username}} disabled=true></ion-input>
+      <ion-label position="floating" color="dark">Email</ion-label>
+      <ion-input value={{pf.username}} disabled=true></ion-input>
     </ion-item>
   </div>
-  <ion-col> 
+  <ion-col>
     <ion-button expand="block" (click)="logout()" shape="round" color="danger" size="default">LOGOUT</ion-button>
   </ion-col>
 </ion-content>

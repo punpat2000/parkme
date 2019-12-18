@@ -1,41 +1,46 @@
 .card {
-margin: 0 auto;
+  margin: 0 auto;
 
-.header {
-height: 135px;
+  .header {
+    height: 135px;
 
-.avatar {
-width: 125px;
-height: 50px;
-position: relative;
-margin: 0 auto;
+    .avatar {
+      width: 125px;
+      height: 50px;
+      position: relative;
+      margin: 0 auto;
+      margin-left: auto;
+      margin-right: auto;
 
-img {
-width: 125px;
-height: 125px;
-object-fit: cover;
-display: block;
-border-radius: 50%;
-position: absolute;
-margin-left: auto;
-margin-right: auto;
-bottom: calc(-1*(80px + 4px));
-//border: 1px solid #000;
-background-color: #fff;
-            }  
-        }
+      img {
+        width: 125px;
+        height: 125px;
+        object-fit: cover;
+        display: block;
+        border-radius: 50%;
+        position: absolute;
+        margin-left: auto;
+        margin-right: auto;
+        bottom: calc(-1 * (80px + 4px));
+        //border: 1px solid #000;
+        background-color: #fff;
+      }
     }
+  }
+}
+ion-content {
+  --overflow: hidden;
 }
 
 ion-spinner {
-    position: fixed;
-    z-index: 999;
-    height: 5em;
-    width: em;
-    overflow: show;
-    margin: auto;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    right: 0;
+  position: fixed;
+  z-index: 999;
+  height: 5em;
+  width: em;
+  overflow: show;
+  margin: auto;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
 }

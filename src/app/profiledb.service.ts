@@ -68,5 +68,16 @@ export class ProfiledbService {
       );
     //return this.profile$;
   }
+  getProfilewithuid(uid:string) {
+    return this.db.collection<User>('profiles', ref => ref.where('uid', '==', uid)).valueChanges()
+      .pipe(
+        map(profiles => {
+          const profile = profiles[0];
+          console.log(profile);
+          return profile;
+        })
+      );
+    //return this.profile$;
+  }
 
 }
