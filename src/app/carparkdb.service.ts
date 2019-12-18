@@ -17,6 +17,8 @@ export class CarparkdbService {
       host: 'test',
       user: 'test',
       status: true,
+      location: '',
+      comment: '',
       Date: Date()
     });
     console.log('addcarpark succeeded')
