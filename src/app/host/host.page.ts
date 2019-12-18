@@ -17,10 +17,10 @@ export class HostPage implements OnInit {
   location: string;
   comment: string;
   url: string;
-  key: string;
   upload: boolean=false;
   uploading: boolean=false;
   edit: boolean=false;
+  info: any;
 
   constructor(private carparkdb: CarparkdbService, private profiledb: ProfiledbService, private storage: AngularFireStorage) {
     this.profile$ = this.profiledb.getProfile();
@@ -49,7 +49,9 @@ export class HostPage implements OnInit {
             this.location = lot.location;
             this.comment = lot.comment;
             this.url = lot.url;
-            this.key = lot.key;
+            console.log(this.location)
+            this.info = childSnapshot.val();
+            this.info.key = childSnapshot.key;
           }
         })
       } else {
@@ -91,6 +93,6 @@ export class HostPage implements OnInit {
   }
 
   editCarpark() {
-    database().ref('/lots/'+this.key).update({location: this.location, comment: this.comment, url: this.url});
+    database().ref('/lots/'+this.info.key).update({location: this.location, comment: this.comment, url: this.url});
   }
 }

@@ -5,4 +5,5 @@ export interface Carpark {
     date: Date;
     status: boolean;
     url: string;
+    user: string;
 }
