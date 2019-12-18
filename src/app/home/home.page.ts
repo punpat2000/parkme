@@ -13,12 +13,14 @@ export class HomePage {
 
   lots = [];
   displayname: string;
+  user: string;
 
   constructor(private carparkdb: CarparkdbService, private profiledb: ProfiledbService
   ) {
     this.profiledb.getProfile().subscribe(event => {
       if (event) {
         this.displayname = event.name;
+        this.user = event.uid;
       } else {
         console.log('error');
       }
@@ -58,9 +60,9 @@ export class HomePage {
     });
   }
   bookCarpark(key:string){
-    database().ref('/lots/'+key).update({status:false});
+    database().ref('/lots/'+key).update({status:false,user:this.user});
   }
   unbookCarpark(key:string){
-    database().ref('/lots/'+key).update({status:true});
+    database().ref('/lots/'+key).update({status:true,user:""});
   }
 }

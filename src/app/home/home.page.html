@@ -15,14 +15,13 @@
       <ion-slide *ngFor="let lot of lots">
         <ion-card-content>
           <ion-card-title>
-            <ion-label>Location: {{lot.host}}</ion-label>
+            <ion-label>Location: {{lot.location}}</ion-label>
           </ion-card-title>
           <ion-label>
             status: {{lot.status}}
           </ion-label>
-          <img src="http://www.imageafter.com/dbase/images/nature_plants/b19nature_plants135.jpg" />
-
-          <ion-button *ngIf="false; else notuser" color="light">booked</ion-button>
+          <img *ngIf="lot.url" [src]="lot.url" />
+          <ion-button *ngIf="!lot.user===user; else notuser" color="light">booked</ion-button>
           <ng-template #notuser>
             <ion-button expand="full" *ngIf="lot.status; else reserved" color="success" (click)="bookCarpark(lot.key)">
               Book</ion-button>
