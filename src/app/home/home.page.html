@@ -8,7 +8,7 @@
 
 <ion-content padding>
   <ion-item>
-    <ion-label>Welcome, {{displayname}}!</ion-label>
+    <ion-label text-center>Welcome, {{displayname}}!</ion-label>
   </ion-item>
   <div>
     <ion-slides [options]="sliderConfig">
@@ -21,12 +21,18 @@
             {{lot.comment}}
           </ion-label>
           <img *ngIf="lot.url" [src]="lot.url" />
-          <ion-button *ngIf="(!lot.status && !(lot.user===this.user)); else notuser" color="light" expand="full">booked</ion-button>
-          <ng-template #notuser>
-            <ion-button expand="full" *ngIf="lot.status; else booked" color="success" (click)="bookCarpark(lot.key)">
-              Book</ion-button>
-            <ng-template #booked>
-              <ion-button expand="full" color="danger" (click)="unbookCarpark(lot.key)">Unbook</ion-button>
+
+          <ion-button *ngIf="lot.host===this.user; else ok" color="light" expand="full">this is your location!
+          </ion-button>
+          <ng-template #ok>
+            <ion-button *ngIf="(!lot.status && !(lot.user===this.user)); else notuser" color="light" expand="full">
+              booked</ion-button>
+            <ng-template #notuser>
+              <ion-button expand="full" *ngIf="lot.status; else booked" color="success" (click)="bookCarpark(lot.key)">
+                Book</ion-button>
+              <ng-template #booked>
+                <ion-button expand="full" color="danger" (click)="unbookCarpark(lot.key)">Unbook</ion-button>
+              </ng-template>
             </ng-template>
           </ng-template>
         </ion-card-content>
