@@ -50,11 +50,17 @@ export class HomePage {
           const lot = childSnapshot.val();
           lot.key = childSnapshot.key;
           this.lots.push(lot);
-          console.log('display carpark')
+          //console.log(lot.status)
         })
       } else {
         console.log('error')
       }
     });
+  }
+  bookCarpark(key:string){
+    database().ref('/lots/'+key).update({status:false});
+  }
+  unbookCarpark(key:string){
+    database().ref('/lots/'+key).update({status:true});
   }
 }
