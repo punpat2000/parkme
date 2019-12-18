@@ -13,6 +13,8 @@ import { AngularFireStorage } from '@angular/fire/storage';
 export class ProfilePage implements OnInit {
   notChanged: Boolean = true
   upload: boolean = false
+  uploading: boolean = false
+  range: string = "100"
 
   name: string;
   phonenumber: string;
@@ -77,14 +79,20 @@ export class ProfilePage implements OnInit {
      return;
     }
 
+    this.uploading = true;
+    this.range = "50";
+
     const path = `profilepictures/${new Date().getTime()}_${file.name}`;
     this.storage.upload(path, file).then(() => {
       const fileRef = this.storage.ref(path);
       fileRef.getDownloadURL().subscribe(url => {
-        this.url = url;})
+        this.url = url;
+        this.uploading = false;
+        this.enableSave();
+        this.range = "100";
+      })
     })
 
     this.upload = false;
-    this.enableSave();
   }
 }

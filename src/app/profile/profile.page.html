@@ -7,11 +7,19 @@
     </ion-toolbar>
   </ion-header>     
 
+<div *ngIf="uploading" id='dim_wrapper' style='width:100%; height:100%; background:#000; z-index:10; position: fixed; opacity: 0.5'>&nbsp;</div>
+<script>
+$("#dim_wrapper").animate({
+    'opacity':0.5
+});
+</script>
+
 <ion-content padding>
   <div class="card">
     <div class="header">
       <div class="avatar">
-        <img *ngIf="url" [src]="url" />
+        <img *ngIf="url" [src]="url"/>
+        <ion-spinner *ngIf="uploading"></ion-spinner>
       </div>
     </div>
     <ion-button expand="block" size="small" fill="clear" (click)="enableUpload()">edit</ion-button>
