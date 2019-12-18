@@ -21,7 +21,7 @@
             status: {{lot.status}}
           </ion-label>
           <img *ngIf="lot.url" [src]="lot.url" />
-          <ion-button *ngIf="!lot.user===user && lot.status; else notuser" color="light">booked</ion-button>
+          <ion-button *ngIf="!lot.user===user && !lot.status; else notuser" color="light" expand="full" >booked</ion-button>
           <ng-template #notuser>
             <ion-button expand="full" *ngIf="lot.status; else reserved" color="success" (click)="bookCarpark(lot.key)">
               Book</ion-button>
