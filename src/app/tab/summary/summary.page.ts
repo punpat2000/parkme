@@ -11,15 +11,19 @@ import { CarparkdbService } from '../../carparkdb.service'
 export class SummaryPage implements OnInit {
   private lots = [];
   private uid:string;
+  private phonenumber: string;
+  
   constructor(private carparkdb: CarparkdbService, private profiledb: ProfiledbService) { 
     this.profiledb.getProfile().subscribe(event => {
       this.uid = event.uid;
-    })
+    });
+
   }
 
   ngOnInit() {
     this.displayCarpark();
   }
+  
 
   displayCarpark() {
     database().ref('lots').on('value', resp => {
