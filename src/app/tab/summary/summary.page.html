@@ -1,0 +1,25 @@
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+
+<ion-header>
+  <ion-toolbar>
+    <ion-title text-center>Summary</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content paddle>
+  <div *ngFor="let lot of lots">
+    <div class="w3-padding">
+      <div class="w3-card-4" style="width:100%">
+        <header class="w3-container w3-light-grey">
+          <h3>{{lot.location}}</h3>
+        </header>
+        <div class="w3-container">
+          <p>{{lot.comment}}</p><br>
+        </div>
+        <ion-button expand="full" (click)="unbookCarpark(lot.key)" size="default" color="danger" *ngIf="uid===lot.host">remove user</ion-button>
+        <ion-button expand="full" color="medium" size="default" color="medium" *ngIf="uid===lot.user" disabled=true>Booked by you</ion-button>
+      </div>
+    </div>
+  </div>
+
+</ion-content>
