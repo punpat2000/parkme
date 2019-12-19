@@ -68,8 +68,24 @@ export class ProfiledbService {
       );
     //return this.profile$;
   }
+
+  getProfilebyID(userID: string){
+    return this.db.collection<User>('profiles', ref => ref.where('uid', '==', userID)).valueChanges()
+      .pipe(
+        map(profiles => {
+          const profile = profiles[0];
+          console.log(profile);
+          return profile;
+        })
+      );
+  }
+
   getId(){
     return this.userId;
+  }
+
+  setNotHost() {
+    this.db.collection('profiles').doc(this.userId).update({ host: false})
   }
 
 }

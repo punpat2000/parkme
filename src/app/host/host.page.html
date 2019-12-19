@@ -4,24 +4,32 @@
   </ion-toolbar>
 </ion-header>
 
+<div *ngIf="uploading" id='dim_wrapper' style='width:100%; height:100%; background:#000; z-index:10; position: fixed; opacity: 0.5'>&nbsp;</div>
+<script>
+  $("#dim_wrapper").animate({
+    'opacity': 0.4
+  });
+</script>
+<ion-spinner *ngIf="uploading"></ion-spinner>
+
 <ion-content padding>
   <div *ngIf="profile$ | async as pf">
     <ion-item>
       <ion-label position="floating" color="medium">Host Name</ion-label>
-      <ion-input value={{pf.name}} disabled=true></ion-input>
+      <ion-input value={{pf.name}} (ngModelChange)="check()" disabled=true></ion-input>
     </ion-item>
     <ion-item>
       <ion-label position="floating" color="medium">Phone Number</ion-label>
-      <ion-input value={{pf.phonenumber}} disabled=true type="tel"></ion-input>
+      <ion-input value={{pf.phonenumber}} (ngModelChange)="check()" disabled=true type="tel"></ion-input>
     </ion-item>
   </div>
   <ion-item>
       <ion-label position="floating" color="medium">Location</ion-label>
-      <ion-input [(ngModel)]="location" (ngModelChange)="enableRegister($event)" required=true></ion-input>
+      <ion-input [(ngModel)]="location" (ngModelChange)="check()" required=true></ion-input>
   </ion-item>
   <ion-item>
       <ion-label position="floating" color="medium">Description</ion-label>
-      <ion-textarea [(ngModel)]="comment" placeholder="Please enter information about your location here." autoGrow=true required=true></ion-textarea>
+      <ion-textarea [(ngModel)]="comment" (ngModelChange)="check()" placeholder="Please enter information about your location here." autoGrow=true required=true></ion-textarea>
   </ion-item>
   <img *ngIf="url" [src]="url"/>
   <ion-button fill="clear" expand="full" (click)="enableUpload()">Upload Location Photo</ion-button>
@@ -35,6 +43,8 @@
         />
       </div>
     </div>
-  <ion-button *ngIf="edit==false" expand="block" shape="round" (click)="addCarpark()">Register as Host</ion-button>
-  <ion-button *ngIf="edit" expand="block" shape="round" (click)="editCarpark()">Save edit</ion-button>
+  <ion-button *ngIf="edit==false" expand="block" shape="round"  disabled={{cannotSubmit}} (click)="addCarpark()">Register as Host</ion-button>
+  <ion-button *ngIf="edit" expand="block" shape="round" disabled={{cannotSubmit}} (click)="editCarpark()">Save edit</ion-button>
+  <ion-button *ngIf="edit" color="danger" expand="block" shape="round" (click)="deleteCarpark()">unregister location</ion-button>
+  
 </ion-content>

@@ -23,6 +23,7 @@ export class CarparkdbService {
       date: Date()
     });
     this.db.collection('profiles').doc(this.profiledb.getId()).update({host: true})
+    this.profiledb.showAlert('Done!', 'Your location has been added!')
     console.log('addcarpark succeeded')
     //this.scroll();
   }

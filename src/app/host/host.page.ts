@@ -14,18 +14,23 @@ import { AngularFireStorage } from '@angular/fire/storage';
 export class HostPage implements OnInit {
   profile$: Observable<User>;
   userID: string;
-  location: string;
-  comment: string;
-  url: string;
+  name: string="";
+  phonenumber: string="";
+  location: string="";
+  comment: string="";
+  url: string="";
   upload: boolean=false;
   uploading: boolean=false;
   edit: boolean=false;
+  cannotSubmit: boolean=true;
   info: any;
 
   constructor(private carparkdb: CarparkdbService, private profiledb: ProfiledbService, private storage: AngularFireStorage) {
     this.profile$ = this.profiledb.getProfile();
     this.profile$.subscribe(resp => {
       this.userID = resp.uid;
+      this.name = resp.name;
+      this.phonenumber = resp.phonenumber;
       if (resp.host) {
         this.edit = true;
         this.getCarpark();
@@ -38,6 +43,7 @@ export class HostPage implements OnInit {
 
   addCarpark() {
     this.carparkdb.addCarpark(this.location, this.comment, this.url);
+    this.cannotSubmit = true;
   }
 
   getCarpark() {
@@ -60,12 +66,17 @@ export class HostPage implements OnInit {
     });
   }
 
-  enableRegister() {
-
-  }
-
   enableUpload() {
     this.upload = true
+  }
+
+  check() {
+    if (this.name=="" || this.phonenumber=="" || this.location=="" || this.comment=="" || this.url=="") {
+      this.cannotSubmit = true;
+    }
+    else {
+      this.cannotSubmit = false;
+    }
   }
 
   uploadFile(event: FileList) {
@@ -86,6 +97,7 @@ export class HostPage implements OnInit {
       fileRef.getDownloadURL().subscribe(url => {
         this.url = url;
         this.uploading = false;
+        this.check();
       })
     })
 
@@ -94,5 +106,18 @@ export class HostPage implements OnInit {
 
   editCarpark() {
     database().ref('/lots/'+this.info.key).update({location: this.location, comment: this.comment, url: this.url});
+    this.profiledb.showAlert('Done!', 'Your location has been updated!');
+    this.cannotSubmit = true;
+  }
+
+  deleteCarpark() {
+    database().ref('/lots/'+this.info.key).remove();
+    this.profiledb.setNotHost();
+    this.location = "";
+    this.comment = "";
+    this.url = "";
+    this.edit = false;
+    this.profiledb.showAlert('Done!', 'Your location has been deleted!')
+    this.check();
   }
 }
