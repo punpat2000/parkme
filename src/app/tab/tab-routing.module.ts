@@ -24,9 +24,14 @@ const routes: Routes = [
         path: '',
         redirectTo: 'profile',
         pathMatch: 'full'
+      },
+      {
+        path: 'summary',
+        loadChildren: () => import('./summary/summary.module').then( m => m.SummaryPageModule)
       }
     ],
   },
+  
 ];
 
 @NgModule({

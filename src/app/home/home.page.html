@@ -13,14 +13,15 @@
   <div>
     <ion-slides [options]="sliderConfig">
       <ion-slide *ngFor="let lot of lots">
-        <ion-card-content>
+        <ion-card-content fullscreen>
+          <img *ngIf="lot.url" [src]="lot.url" />
           <ion-card-title>
             <ion-label>Location: {{lot.location}}</ion-label>
           </ion-card-title>
-          <ion-label>
+          <ion-card-content>
             {{lot.comment}}
-          </ion-label>
-          <img *ngIf="lot.url" [src]="lot.url" />
+          </ion-card-content>
+          
 
           <ion-button *ngIf="lot.host===this.user; else ok" color="light" expand="full">this is your location!
           </ion-button>
