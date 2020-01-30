@@ -1,5 +1,7 @@
 {
   "name": "park_me",
-  "integrations": {},
+  "integrations": {
+    "cordova": {}
+  },
   "type": "angular"
 }
