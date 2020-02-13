@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
-import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
+import { AngularFirestore } from '@angular/fire/firestore';
 import { User } from '../../models/user.model';
-import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { AlertController } from '@ionic/angular'
 
@@ -11,7 +10,6 @@ import { AlertController } from '@ionic/angular'
 })
 export class ProfiledbService {
 
-  //profile$: Observable<User>;
   private userId: string;
   name: string;
 
