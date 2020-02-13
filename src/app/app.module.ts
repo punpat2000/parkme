@@ -4,7 +4,6 @@ import { RouteReuseStrategy } from '@angular/router';
 
 import { FormsModule } from '@angular/forms';
 
-import { environment } from 'src/environments/environment';
 
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
@@ -22,6 +21,8 @@ import { AngularFireAuthGuard } from '@angular/fire/auth-guard';
 
 import { AngularFirestore, AngularFirestoreModule } from '@angular/fire/firestore';
 import { AngularFireStorageModule } from '@angular/fire/storage';
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { environment } from '../environments/environment';
 
 const firebaseUiAuthConfig: firebaseui.auth.Config = {
   signInFlow: 'popup',
@@ -48,6 +49,7 @@ const firebaseUiAuthConfig: firebaseui.auth.Config = {
     FirebaseUIModule.forRoot(firebaseUiAuthConfig),
     AngularFirestoreModule,
     AngularFireStorageModule,
+    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
   ],
   providers: [
     StatusBar,
