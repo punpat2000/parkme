@@ -9,9 +9,9 @@ import { CarparkdbService } from '../../carparkdb.service'
   styleUrls: ['./summary.page.scss'],
 })
 export class SummaryPage implements OnInit {
-  private lots = [];
-  private uid:string;
-  private phonenumber: string;
+  lots = [];
+  uid:string;
+  phonenumber: string;
   
   constructor(private carparkdb: CarparkdbService, private profiledb: ProfiledbService) { 
     this.profiledb.getProfile().subscribe(event => {

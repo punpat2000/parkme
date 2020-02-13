@@ -15,7 +15,11 @@ export class ProfiledbService {
   private userId: string;
   name: string;
 
-  constructor(private afAuth: AngularFireAuth, private db: AngularFirestore, private alertController: AlertController) {
+  constructor(
+    private afAuth: AngularFireAuth,
+    private db: AngularFirestore,
+    private alertController: AlertController
+    ) {
     this.userId = this.afAuth.auth.currentUser.uid;
     this.db.collection('profiles', ref =>
       ref.where('uid', '==', this.userId)).get()
@@ -62,7 +66,6 @@ export class ProfiledbService {
       .pipe(
         map(profiles => {
           const profile = profiles[0];
-          console.log(profile);
           return profile;
         })
       );

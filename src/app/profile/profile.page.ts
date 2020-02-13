@@ -1,16 +1,17 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { UsermgmtService } from '../usermgmt.service'
 import { Observable } from 'rxjs';
 import { User } from '../../models/user.model'
 import { ProfiledbService } from '../profiledb.service'
 import { AngularFireStorage } from '@angular/fire/storage';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.page.html',
   styleUrls: ['./profile.page.scss'],
 })
-export class ProfilePage implements OnInit {
+export class ProfilePage implements OnInit, OnDestroy {
   notChanged: Boolean = true
   upload: boolean = false
   uploading: boolean = false
@@ -21,12 +22,11 @@ export class ProfilePage implements OnInit {
   url: string;
   profile$: Observable<User>;
 
-  constructor(private userm: UsermgmtService, private profiledb: ProfiledbService, private storage: AngularFireStorage) {
-    this.profile$ = this.profiledb.getProfile();
-    this.setName();
-    this.setPhonenumber();
-    this.setURL();
-  }
+  constructor(
+    private userm: UsermgmtService,
+    private profiledb: ProfiledbService,
+    private storage: AngularFireStorage
+    ) {}
 
   setName(){
     this.profile$.subscribe(event => {
@@ -48,13 +48,17 @@ export class ProfilePage implements OnInit {
   }
 
   ngOnInit() {
+    this.profile$ = this.profiledb.getProfile();
+    this.setName();
+    this.setPhonenumber();
+    this.setURL();
   }
 
   logout() {
     this.userm.logout();
   }
 
-  enableSave() {
+  enableSave(event?:Event) {
     this.notChanged = false;
   }
 
@@ -91,5 +95,7 @@ export class ProfilePage implements OnInit {
     })
 
     this.upload = false;
+  }
+  ngOnDestroy(){
   }
 }

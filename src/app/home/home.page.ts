@@ -11,9 +11,9 @@ import { ProfiledbService } from '../profiledb.service'
 })
 export class HomePage {
 
-  private lots = [];
-  private displayname: string;
-  private user: string;
+  lots = [];
+  displayname: string;
+  user: string;
 
   constructor(private carparkdb: CarparkdbService, private profiledb: ProfiledbService
   ) {
