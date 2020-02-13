@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { ProfiledbService } from '../profiledb.service'
 
 @Component({
   selector: 'app-tab',
@@ -8,11 +7,9 @@ import { ProfiledbService } from '../profiledb.service'
 })
 export class TabPage implements OnInit {
 
-  constructor(private profiledb: ProfiledbService) {}
+  constructor() {}
 
   ngOnInit() {
-    //this.profiledb.addUser();
-    console.log('Welcome!');
   }
 
 }

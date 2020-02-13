@@ -7,14 +7,19 @@ import { IonicModule } from '@ionic/angular';
 import { SummaryPageRoutingModule } from './summary-routing.module';
 
 import { SummaryPage } from './summary.page';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    SummaryPageRoutingModule
+    SummaryPageRoutingModule,
+    MatCardModule,
+    MatButtonModule,
   ],
   declarations: [SummaryPage]
 })
-export class SummaryPageModule {}
+export class SummaryPageModule { }

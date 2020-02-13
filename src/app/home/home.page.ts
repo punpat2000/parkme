@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
-import { CarparkdbService } from '../carparkdb.service'
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { database } from 'firebase'
-import { ProfiledbService } from '../profiledb.service'
+import { ProfiledbService } from '../services/profiledb.service'
+import { ReplaySubject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 
 @Component({
@@ -9,27 +10,33 @@ import { ProfiledbService } from '../profiledb.service'
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],
 })
-export class HomePage {
+export class HomePage implements OnInit, OnDestroy {
 
   lots = [];
   displayname: string;
   user: string;
+  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-  constructor(private carparkdb: CarparkdbService, private profiledb: ProfiledbService
-  ) {
-    this.profiledb.getProfile().subscribe(event => {
+  constructor(
+    private profiledb: ProfiledbService
+  ) {}
+
+  ngOnInit(): void {
+    this.profiledb.getProfile().pipe(takeUntil(this.destroyed$)).subscribe(event => {
       if (event) {
         this.displayname = event.name;
         this.user = event.uid;
       } else {
         console.log('error');
       }
-    })
-  }
-
-  ngOnInit() {
+    });
     this.displayCarpark();
   }
+  ngOnDestroy(): void{
+    this.destroyed$.next(true);
+    this.destroyed$.complete();
+  }
+
   sliderConfig = {
     slidesPerView: 1,
     centeredSlides: true,
@@ -41,10 +48,9 @@ export class HomePage {
       modifier: 1,
       slideShadows: true,
     }
-
   }
 
-  displayCarpark() {
+  displayCarpark(): void {
     database().ref('lots').on('value', resp => {
       if (resp) {
         this.lots = [];
@@ -52,7 +58,6 @@ export class HomePage {
           const lot = childSnapshot.val();
           lot.key = childSnapshot.key;
           this.lots.push(lot);
-          //console.log(lot.status)
         })
       } else {
         console.log('error')

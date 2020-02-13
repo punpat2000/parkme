@@ -1,8 +1,8 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { UsermgmtService } from '../usermgmt.service'
-import { Observable } from 'rxjs';
+import { UsermgmtService } from '../services/usermgmt.service'
+import { Observable, ReplaySubject } from 'rxjs';
 import { User } from '../../models/user.model'
-import { ProfiledbService } from '../profiledb.service'
+import { ProfiledbService } from '../services/profiledb.service'
 import { AngularFireStorage } from '@angular/fire/storage';
 import { takeUntil } from 'rxjs/operators';
 
@@ -21,6 +21,8 @@ export class ProfilePage implements OnInit, OnDestroy {
   username: string;
   url: string;
   profile$: Observable<User>;
+  showBar: boolean = false;
+  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(
     private userm: UsermgmtService,
@@ -28,30 +30,20 @@ export class ProfilePage implements OnInit, OnDestroy {
     private storage: AngularFireStorage
     ) {}
 
-  setName(){
-    this.profile$.subscribe(event => {
-      this.name = event.name;
-    });
-    console.log(this.name + ' @setname');
-  }
-
-  setPhonenumber(){
-    this.profile$.subscribe(event => {
-      this.phonenumber = event.phonenumber;
-    });
-  }
-
-  setURL() {
-    this.profile$.subscribe(event => {
-      this.url = event.url;
-    });
-  }
-
   ngOnInit() {
     this.profile$ = this.profiledb.getProfile();
-    this.setName();
-    this.setPhonenumber();
-    this.setURL();
+    this.profile$.pipe(takeUntil(this.destroyed$))
+      .subscribe(event => {
+      if(event!==undefined){
+        this.name = event.name;
+        this.phonenumber = event.phonenumber;
+        this.url = event.url;
+      } else {
+        this.url = '';
+        this.phonenumber = '';
+        this.url = '';
+      }
+    });
   }
 
   logout() {
@@ -62,9 +54,10 @@ export class ProfilePage implements OnInit, OnDestroy {
     this.notChanged = false;
   }
 
-  async save() {
+  async save():Promise<void> {
+    this.showBar = true;
     await this.profiledb.updateProfile(this.name,this.phonenumber, this.url);
-    console.log('back to save');
+    this.showBar = false;
     this.notChanged = true;
   }
 
@@ -87,7 +80,7 @@ export class ProfilePage implements OnInit, OnDestroy {
     const path = `profilepictures/${new Date().getTime()}_${file.name}`;
     this.storage.upload(path, file).then(() => {
       const fileRef = this.storage.ref(path);
-      fileRef.getDownloadURL().subscribe(url => {
+      fileRef.getDownloadURL().pipe(takeUntil(this.destroyed$)).subscribe(url => {
         this.url = url;
         this.uploading = false;
         this.enableSave();
@@ -97,5 +90,7 @@ export class ProfilePage implements OnInit, OnDestroy {
     this.upload = false;
   }
   ngOnDestroy(){
+    this.destroyed$.next(true);
+    this.destroyed$.complete();
   }
 }

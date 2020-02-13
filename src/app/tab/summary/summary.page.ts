@@ -1,37 +1,42 @@
-import { Component, OnInit } from '@angular/core';
-import { database } from 'firebase'
-import { ProfiledbService } from '../../profiledb.service'
-import { CarparkdbService } from '../../carparkdb.service'
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { database } from 'firebase';
+import { ProfiledbService } from '../../services/profiledb.service';
+import { ReplaySubject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-summary',
   templateUrl: './summary.page.html',
   styleUrls: ['./summary.page.scss'],
 })
-export class SummaryPage implements OnInit {
+export class SummaryPage implements OnInit, OnDestroy {
   lots = [];
-  uid:string;
+  uid: string;
   phonenumber: string;
-  
-  constructor(private carparkdb: CarparkdbService, private profiledb: ProfiledbService) { 
-    this.profiledb.getProfile().subscribe(event => {
-      this.uid = event.uid;
-    });
+  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
+  constructor(private profiledb: ProfiledbService) {
   }
 
   ngOnInit() {
+    this.profiledb.getProfile().pipe(takeUntil(this.destroyed$)).subscribe(event => {
+      this.uid = event.uid;
+    });
     this.displayCarpark();
   }
-  
+  ngOnDestroy(): void {
+    this.destroyed$.next(true);
+    this.destroyed$.complete();
+  }
 
-  displayCarpark() {
+
+  displayCarpark(): void {
     database().ref('lots').on('value', resp => {
       if (resp) {
         this.lots = [];
         resp.forEach(childSnapshot => {
           const lot = childSnapshot.val();
-          if (!lot.status&&(this.profiledb.getId() === lot.host || this.profiledb.getId() === lot.user)) {
+          if (!lot.status && (this.profiledb.getId() === lot.host || this.profiledb.getId() === lot.user)) {
 
             lot.key = childSnapshot.key;
             this.lots.push(lot);
@@ -46,8 +51,8 @@ export class SummaryPage implements OnInit {
     });
   }
 
-  unbookCarpark(key:string){
-    database().ref('/lots/'+key).update({status:true,user:""});
+  unbookCarpark(key: string) {
+    database().ref('/lots/' + key).update({ status: true, user: "" });
   }
 
 }

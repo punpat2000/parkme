@@ -23,6 +23,7 @@ import { AngularFirestore, AngularFirestoreModule } from '@angular/fire/firestor
 import { AngularFireStorageModule } from '@angular/fire/storage';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 const firebaseUiAuthConfig: firebaseui.auth.Config = {
   signInFlow: 'popup',
@@ -42,6 +43,7 @@ const firebaseUiAuthConfig: firebaseui.auth.Config = {
   entryComponents: [],
   imports: [
     BrowserModule,
+    FormsModule,
     IonicModule.forRoot(),
     AppRoutingModule,
     AngularFireModule.initializeApp(environment.firebase),
@@ -50,6 +52,7 @@ const firebaseUiAuthConfig: firebaseui.auth.Config = {
     AngularFirestoreModule,
     AngularFireStorageModule,
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
+    BrowserAnimationsModule,
   ],
   providers: [
     StatusBar,

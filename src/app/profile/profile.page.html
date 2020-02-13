@@ -6,6 +6,7 @@
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
+<mat-progress-bar color="primary" mode="indeterminate" *ngIf="showBar"></mat-progress-bar>
 
 <div *ngIf="uploading" id='dim_wrapper' style='width:100%; height:100%; background:#000; z-index:10; position: fixed; opacity: 0.5'>&nbsp;</div>
 <script>

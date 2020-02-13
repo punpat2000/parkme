@@ -1,17 +1,18 @@
-import { Component, OnInit } from '@angular/core';
-import { CarparkdbService } from '../carparkdb.service'
-import { ProfiledbService } from '../profiledb.service'
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { CarparkdbService } from '../services/carparkdb.service'
+import { ProfiledbService } from '../services/profiledb.service'
 import { User } from '../../models/user.model'
 import { database } from 'firebase'
-import { Observable } from 'rxjs';
+import { Observable, ReplaySubject } from 'rxjs';
 import { AngularFireStorage } from '@angular/fire/storage';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-host',
   templateUrl: './host.page.html',
   styleUrls: ['./host.page.scss'],
 })
-export class HostPage implements OnInit {
+export class HostPage implements OnInit, OnDestroy {
   profile$: Observable<User>;
   userID: string;
   name: string="";
@@ -24,10 +25,17 @@ export class HostPage implements OnInit {
   edit: boolean=false;
   cannotSubmit: boolean=true;
   info: any;
+  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-  constructor(private carparkdb: CarparkdbService, private profiledb: ProfiledbService, private storage: AngularFireStorage) {
+  constructor(
+    private carparkdb: CarparkdbService,
+    private profiledb: ProfiledbService,
+    private storage: AngularFireStorage
+  ) {}
+
+  ngOnInit() {
     this.profile$ = this.profiledb.getProfile();
-    this.profile$.subscribe(resp => {
+    this.profile$.pipe(takeUntil(this.destroyed$)).subscribe(resp => {
       this.userID = resp.uid;
       this.name = resp.name;
       this.phonenumber = resp.phonenumber;
@@ -35,10 +43,12 @@ export class HostPage implements OnInit {
         this.edit = true;
         this.getCarpark();
       }
-    })
+    });
   }
-
-  ngOnInit() {
+  
+  ngOnDestroy():void{
+    this.destroyed$.next(true);
+    this.destroyed$.complete();
   }
 
   addCarpark() {
@@ -55,7 +65,7 @@ export class HostPage implements OnInit {
             this.location = lot.location;
             this.comment = lot.comment;
             this.url = lot.url;
-            console.log(this.location)
+            //console.log(this.location)
             this.info = childSnapshot.val();
             this.info.key = childSnapshot.key;
           }
@@ -94,19 +104,18 @@ export class HostPage implements OnInit {
     const path = `locationpictures/${new Date().getTime()}_${file.name}`;
     this.storage.upload(path, file).then(() => {
       const fileRef = this.storage.ref(path);
-      fileRef.getDownloadURL().subscribe(url => {
+      fileRef.getDownloadURL().pipe(takeUntil(this.destroyed$)).subscribe(url => {
         this.url = url;
         this.uploading = false;
         this.check();
       })
     })
-
     this.upload = false;
   }
 
   editCarpark() {
     database().ref('/lots/'+this.info.key).update({location: this.location, comment: this.comment, url: this.url});
-    this.profiledb.showAlert('Done!', 'Your location has been updated!');
+    this.profiledb.showAlert('Done!','Your location has been updated!' );
     this.cannotSubmit = true;
   }
 

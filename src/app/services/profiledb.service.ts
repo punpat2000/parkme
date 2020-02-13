@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
-import { User } from '../models/user.model'
+import { User } from '../../models/user.model';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { AlertController } from '@ionic/angular'
@@ -19,7 +19,7 @@ export class ProfiledbService {
     private afAuth: AngularFireAuth,
     private db: AngularFirestore,
     private alertController: AlertController
-    ) {
+  ) {
     this.userId = this.afAuth.auth.currentUser.uid;
     this.db.collection('profiles', ref =>
       ref.where('uid', '==', this.userId)).get()
@@ -33,9 +33,9 @@ export class ProfiledbService {
             host: false,
             url: "https://firebasestorage.googleapis.com/v0/b/parkmebysaint.appspot.com/o/blank-profile.png?alt=media&token=4f775ff6-4520-4ecf-b2e0-04148fedaaa7"
           });
-          console.log('profile added!, ' + this.userId);
+          console.log('profile added!');
         } else {
-          console.log('profile existed!, ' + this.userId);
+          console.log('profile existed!');
           return;
         }
       });
@@ -47,22 +47,25 @@ export class ProfiledbService {
       buttons: ['Ok']
     });
     await alert.present();
+    await alert.onDidDismiss();
   }
 
 
 
   async updateProfile(name: string, phonenumber: string, url: string) {
     if (name.length > 0) {
-      await this.db.collection('profiles').doc(this.userId).update({ name: name, phonenumber: phonenumber , url: url});
-      await this.showAlert('Done!', 'Your profile has been updated')
+      await this.db.collection('profiles').doc(this.userId).update({ name: name, phonenumber: phonenumber, url: url });
+      await this.showAlert('Done!', 'Your profile has been updated');
+      //await this.alertController.dismiss();
       console.log('Profile updated')
     } else {
-      await this.showAlert('Oh no!', 'Please enter name')
-      console.log('error')
+      await this.showAlert('Oh no!', 'Please enter name');
+      console.log('error');
     }
   }
   getProfile() {
-    return this.db.collection<User>('profiles', ref => ref.where('uid', '==', this.userId)).valueChanges()
+    return this.db.collection<User>('profiles', ref => ref.where('uid', '==', this.userId))
+      .valueChanges()
       .pipe(
         map(profiles => {
           const profile = profiles[0];
@@ -72,23 +75,22 @@ export class ProfiledbService {
     //return this.profile$;
   }
 
-  getProfilebyID(userID: string){
+  getProfilebyID(userID: string) {
     return this.db.collection<User>('profiles', ref => ref.where('uid', '==', userID)).valueChanges()
       .pipe(
         map(profiles => {
           const profile = profiles[0];
-          console.log(profile);
           return profile;
         })
       );
   }
 
-  getId(){
+  getId() {
     return this.userId;
   }
 
   setNotHost() {
-    this.db.collection('profiles').doc(this.userId).update({ host: false})
+    this.db.collection('profiles').doc(this.userId).update({ host: false })
   }
 
 }
