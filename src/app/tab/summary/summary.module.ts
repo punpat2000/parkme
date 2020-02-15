@@ -7,6 +7,7 @@ import { IonicModule } from '@ionic/angular';
 import { SummaryPageRoutingModule } from './summary-routing.module';
 
 import { SummaryPage } from './summary.page';
+import { CardElementComponent } from '../card-element/card-element.component';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 
@@ -20,6 +21,6 @@ import { MatCardModule } from '@angular/material/card';
     MatCardModule,
     MatButtonModule,
   ],
-  declarations: [SummaryPage]
+  declarations: [SummaryPage, CardElementComponent]
 })
 export class SummaryPageModule { }

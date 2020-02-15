@@ -4,7 +4,7 @@ import { Observable, ReplaySubject } from 'rxjs';
 import { User } from '../../models/user.model'
 import { ProfiledbService } from '../services/profiledb.service'
 import { AngularFireStorage } from '@angular/fire/storage';
-import { takeUntil } from 'rxjs/operators';
+import { takeUntil, filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-profile',
@@ -16,11 +16,10 @@ export class ProfilePage implements OnInit, OnDestroy {
   upload: boolean = false
   uploading: boolean = false
 
-  name: string;
-  phonenumber: string;
-  username: string;
-  url: string;
-  profile$: Observable<User>;
+  name: string ='';
+  phonenumber: string ='';
+  username: string='';
+  url: string='';
   showBar: boolean = false;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -28,35 +27,38 @@ export class ProfilePage implements OnInit, OnDestroy {
     private userm: UsermgmtService,
     private profiledb: ProfiledbService,
     private storage: AngularFireStorage
-    ) {}
+  ) { }
 
   ngOnInit() {
-    this.profile$ = this.profiledb.getProfile();
-    this.profile$.pipe(takeUntil(this.destroyed$))
+    const profileRef$ = this.profiledb.getProfile();
+    profileRef$
+      .pipe(
+        takeUntil(this.destroyed$),
+        filter(data => typeof data !== 'undefined')
+      )
       .subscribe(event => {
-      if(event!==undefined){
-        this.name = event.name;
-        this.phonenumber = event.phonenumber;
-        this.url = event.url;
-      } else {
-        this.url = '';
-        this.phonenumber = '';
-        this.url = '';
-      }
-    });
+        if (event) {
+          this.name = event.name;
+          this.phonenumber = event.phonenumber;
+          this.url = event.url;
+          this.username = event.username;
+        } else {
+          console.log(`error`);
+        }
+      });
   }
 
   logout() {
     this.userm.logout();
   }
 
-  enableSave(event?:Event) {
+  enableSave(event?: Event) {
     this.notChanged = false;
   }
 
-  async save():Promise<void> {
+  async save(): Promise<void> {
     this.showBar = true;
-    await this.profiledb.updateProfile(this.name,this.phonenumber, this.url);
+    await this.profiledb.updateProfile(this.name, this.phonenumber, this.url);
     this.showBar = false;
     this.notChanged = true;
   }
@@ -68,11 +70,11 @@ export class ProfilePage implements OnInit, OnDestroy {
   uploadFile(event: FileList) {
     // The File object
     const file = event.item(0)
- 
+
     // Validation for Images Only
-    if (file.type.split('/')[0] !== 'image') { 
-     console.error('unsupported file type :( ')
-     return;
+    if (file.type.split('/')[0] !== 'image') {
+      console.error('unsupported file type :( ')
+      return;
     }
 
     this.uploading = true;
@@ -89,7 +91,7 @@ export class ProfilePage implements OnInit, OnDestroy {
 
     this.upload = false;
   }
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.destroyed$.next(true);
     this.destroyed$.complete();
   }

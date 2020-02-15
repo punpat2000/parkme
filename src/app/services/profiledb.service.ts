@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { User } from '../../models/user.model';
-import { map } from 'rxjs/operators';
+import { map, filter } from 'rxjs/operators';
 import { AlertController } from '@ionic/angular'
 
 @Injectable({
@@ -19,26 +19,45 @@ export class ProfiledbService {
     private alertController: AlertController
   ) {
     this.userId = this.afAuth.auth.currentUser.uid;
-    this.db.collection('profiles', ref =>
-      ref.where('uid', '==', this.userId)).get()
-      .subscribe(profile => {
-        if (profile.empty) {
-          this.db.collection('profiles').doc(this.userId).set({
-            username: this.afAuth.auth.currentUser.email,
-            uid: this.userId,
-            phonenumber: '',
-            name: this.afAuth.auth.currentUser.displayName,
-            host: false,
-            url: "https://firebasestorage.googleapis.com/v0/b/parkmebysaint.appspot.com/o/blank-profile.png?alt=media&token=4f775ff6-4520-4ecf-b2e0-04148fedaaa7"
-          });
-          console.log('profile added!');
-        } else {
-          console.log('profile existed!');
-          return;
+    const defaultSet = {
+      username: this.afAuth.auth.currentUser.email,
+      uid: this.userId,
+      phonenumber: '',
+      name: this.afAuth.auth.currentUser.displayName,
+      host: false,
+      url: "https://firebasestorage.googleapis.com/v0/b/parkmebysaint.appspot.com/o/blank-profile.png?alt=media&token=4f775ff6-4520-4ecf-b2e0-04148fedaaa7"
+    };
+    const col = this.db.collection<User>('profiles');
+    col.ref.where('uid', '==', this.userId).get()
+      .then(user => {
+        if (user.empty) {
+          col.doc(this.userId)
+          .set(defaultSet)
+          .catch(err => console.log(err));
         }
-      });
+      })
+      .catch(err => console.log(err));
+    // this.db.collection('profiles', ref =>
+    //   ref.where('uid', '==', this.userId)).get()
+    //   .pipe(filter(data => typeof data !== 'undefined'))
+    //   .subscribe(profile => {
+    //     if (profile.empty) {
+    //       this.db.collection('profiles').doc(this.userId).set({
+    //         username: this.afAuth.auth.currentUser.email,
+    //         uid: this.userId,
+    //         phonenumber: '',
+    //         name: this.afAuth.auth.currentUser.displayName,
+    //         host: false,
+    //         url: "https://firebasestorage.googleapis.com/v0/b/parkmebysaint.appspot.com/o/blank-profile.png?alt=media&token=4f775ff6-4520-4ecf-b2e0-04148fedaaa7"
+    //       });
+    //       console.log('profile added!');
+    //     } else {
+    //       console.log('profile existed!');
+    //       return;
+    //     }
+    //   });
   }
-  async showAlert(header: string, message: string) {
+  async showAlert(header: string, message: string): Promise<void> {
     const alert = await this.alertController.create({
       header: header,
       message: message,
@@ -68,9 +87,9 @@ export class ProfiledbService {
         map(profiles => {
           const profile = profiles[0];
           return profile;
-        })
+        }),
+        filter(value => typeof value !== 'undefined'),
       );
-    //return this.profile$;
   }
 
   getProfilebyID(userID: string) {
@@ -79,7 +98,8 @@ export class ProfiledbService {
         map(profiles => {
           const profile = profiles[0];
           return profile;
-        })
+        }),
+        filter(value => typeof value !== 'undefined'),
       );
   }
 
@@ -88,7 +108,10 @@ export class ProfiledbService {
   }
 
   setNotHost() {
-    this.db.collection('profiles').doc(this.userId).update({ host: false })
+    this.db.collection('profiles')
+      .doc(this.userId)
+      .update({ host: false })
+      .catch(e => console.log(e));
   }
 
 }

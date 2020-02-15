@@ -12,9 +12,10 @@ export class CarparkdbService {
     private db: AngularFirestore
   ) { }
 
-  addCarpark(location: string, comment: string, url: string) {
-    const newData = database().ref('/lots').push();
-    newData.set({
+  async addCarpark(location: string, comment: string, url: string): Promise<void>{
+    try{
+      const newData = database().ref('/lots').push();
+    await newData.set({
       host: this.profiledb.getId(),
       user: "",
       status: true,
@@ -23,9 +24,11 @@ export class CarparkdbService {
       url: url,
       date: Date()
     });
-    this.db.collection('profiles').doc(this.profiledb.getId()).update({host: true})
-    this.profiledb.showAlert('Done!', 'Your location has been added!')
-    console.log('addcarpark succeeded')
-    //this.scroll();
+    await this.db.collection('profiles').doc(this.profiledb.getId()).update({host: true});
+    this.profiledb.showAlert('Done!', 'Your location has been added!');
+    console.log('addcarpark succeeded');
+    } catch(e){
+      throw e;
+    }
   }
 }

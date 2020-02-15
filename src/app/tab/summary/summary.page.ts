@@ -2,7 +2,8 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { database } from 'firebase';
 import { ProfiledbService } from '../../services/profiledb.service';
 import { ReplaySubject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { takeUntil, filter } from 'rxjs/operators';
+import { Park} from 'src/models/carpark.model';
 
 @Component({
   selector: 'app-summary',
@@ -10,8 +11,8 @@ import { takeUntil } from 'rxjs/operators';
   styleUrls: ['./summary.page.scss'],
 })
 export class SummaryPage implements OnInit, OnDestroy {
-  lots = [];
-  uid: string;
+  lots: Array<Park>=[];
+  uid: string = '';
   phonenumber: string;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -19,7 +20,11 @@ export class SummaryPage implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.profiledb.getProfile().pipe(takeUntil(this.destroyed$)).subscribe(event => {
+    this.profiledb.getProfile()
+    .pipe(
+      takeUntil(this.destroyed$),
+      filter(data => typeof data !== 'undefined'))
+    .subscribe(event => {
       this.uid = event.uid;
     });
     this.displayCarpark();
@@ -37,22 +42,19 @@ export class SummaryPage implements OnInit, OnDestroy {
         resp.forEach(childSnapshot => {
           const lot = childSnapshot.val();
           if (!lot.status && (this.profiledb.getId() === lot.host || this.profiledb.getId() === lot.user)) {
-
             lot.key = childSnapshot.key;
             this.lots.push(lot);
             //console.log(lot.status)
-          } else {
-            console.log("error");
           }
         })
       } else {
-        console.log('error')
+        console.log('error');
       }
     });
   }
 
   unbookCarpark(key: string) {
-    database().ref('/lots/' + key).update({ status: true, user: "" });
+    database().ref('/lots/' + key).update({ status: true, user: "" }).catch(e => console.log(e));
   }
 
 }
