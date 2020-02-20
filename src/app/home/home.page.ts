@@ -1,8 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { database } from 'firebase'
 import { ProfiledbService } from '../services/profiledb.service'
-import { ReplaySubject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import {untilDestroyed} from 'ngx-take-until-destroy';
 
 
 @Component({
@@ -15,14 +14,13 @@ export class HomePage implements OnInit, OnDestroy {
   lots = [];
   displayname: string;
   user: string;
-  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(
     private profiledb: ProfiledbService
   ) {}
 
   ngOnInit(): void {
-    this.profiledb.getProfile().pipe(takeUntil(this.destroyed$)).subscribe(event => {
+    this.profiledb.getProfile().pipe(untilDestroyed(this)).subscribe(event => {
       if (event) {
         this.displayname = event.name;
         this.user = event.uid;
@@ -33,8 +31,6 @@ export class HomePage implements OnInit, OnDestroy {
     this.displayCarpark();
   }
   ngOnDestroy(): void{
-    this.destroyed$.next(true);
-    this.destroyed$.complete();
   }
 
   sliderConfig = {

@@ -8,7 +8,7 @@ import { AngularFireAuth } from '@angular/fire/auth';
 export class UsermgmtService {
   constructor(private afAuth: AngularFireAuth) { }
 
-  async logout() {
+  async logout():Promise<void> {
     try {
       await this.afAuth.auth.signOut();
       location.reload();

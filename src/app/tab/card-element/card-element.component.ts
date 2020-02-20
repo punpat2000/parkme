@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { Park } from 'src/models/carpark.model';
+import { Carpark } from 'src/models/carpark.model';
 
 @Component({
   selector: 'app-card-element',
@@ -8,7 +8,7 @@ import { Park } from 'src/models/carpark.model';
 })
 export class CardElementComponent implements OnInit {
 
-  @Input() lot:Park;
+  @Input() lot:Carpark;
   @Input() uid: string;
   @Output() carUnbooked = new EventEmitter<string>();
 

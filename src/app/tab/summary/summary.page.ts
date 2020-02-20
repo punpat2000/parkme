@@ -3,7 +3,7 @@ import { database } from 'firebase';
 import { ProfiledbService } from '../../services/profiledb.service';
 import { ReplaySubject } from 'rxjs';
 import { takeUntil, filter } from 'rxjs/operators';
-import { Park} from 'src/models/carpark.model';
+import { Carpark} from 'src/models/carpark.model';
 
 @Component({
   selector: 'app-summary',
@@ -11,7 +11,7 @@ import { Park} from 'src/models/carpark.model';
   styleUrls: ['./summary.page.scss'],
 })
 export class SummaryPage implements OnInit, OnDestroy {
-  lots: Array<Park>=[];
+  lots: Array<Carpark>=[];
   uid: string = '';
   phonenumber: string;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
