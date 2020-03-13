@@ -13,14 +13,14 @@
 <ion-spinner *ngIf="uploading"></ion-spinner>
 
 <ion-content class="ion-padding">
-  <div *ngIf="profile$ | async as pf">
+  <div>
     <ion-item>
       <ion-label position="floating" color="medium">Host Name</ion-label>
-      <ion-input value={{pf.name}} (ngModelChange)="check()" disabled=true></ion-input>
+      <ion-input value={{name}} (ngModelChange)="check()" disabled=true></ion-input>
     </ion-item>
     <ion-item>
       <ion-label position="floating" color="medium">Phone Number</ion-label>
-      <ion-input value={{pf.phonenumber}} (ngModelChange)="check()" disabled=true type="tel"></ion-input>
+      <ion-input value={{phonenumber}} (ngModelChange)="check()" disabled=true type="tel"></ion-input>
     </ion-item>
   </div>
   <ion-item>

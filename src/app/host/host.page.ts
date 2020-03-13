@@ -13,7 +13,6 @@ import { takeUntil } from 'rxjs/operators';
   styleUrls: ['./host.page.scss'],
 })
 export class HostPage implements OnInit, OnDestroy {
-  profile$: Observable<User>;
   userID: string;
   name: string="";
   phonenumber: string="";
@@ -34,8 +33,8 @@ export class HostPage implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    this.profile$ = this.profiledb.getProfile();
-    this.profile$.pipe(takeUntil(this.destroyed$)).subscribe(resp => {
+    const profileRef = this.profiledb.getProfile();
+    profileRef.pipe(takeUntil(this.destroyed$)).subscribe(resp => {
       this.userID = resp.uid;
       this.name = resp.name;
       this.phonenumber = resp.phonenumber;
