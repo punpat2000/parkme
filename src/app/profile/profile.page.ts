@@ -1,10 +1,9 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { UsermgmtService } from '../services/usermgmt.service'
-import { Observable, ReplaySubject } from 'rxjs';
-import { User } from '../../models/user.model'
 import { ProfiledbService } from '../services/profiledb.service'
 import { AngularFireStorage } from '@angular/fire/storage';
-import { takeUntil, filter } from 'rxjs/operators';
+import { filter } from 'rxjs/operators';
+import { untilDestroyed } from 'ngx-take-until-destroy';
 
 @Component({
   selector: 'app-profile',
@@ -21,7 +20,6 @@ export class ProfilePage implements OnInit, OnDestroy {
   username: string='';
   url: string='';
   showBar: boolean = false;
-  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(
     private userm: UsermgmtService,
@@ -33,7 +31,7 @@ export class ProfilePage implements OnInit, OnDestroy {
     const profileRef$ = this.profiledb.getProfile();
     profileRef$
       .pipe(
-        takeUntil(this.destroyed$),
+        untilDestroyed(this),
         filter(data => typeof data !== 'undefined')
       )
       .subscribe(event => {
@@ -82,7 +80,7 @@ export class ProfilePage implements OnInit, OnDestroy {
     const path = `profilepictures/${new Date().getTime()}_${file.name}`;
     this.storage.upload(path, file).then(() => {
       const fileRef = this.storage.ref(path);
-      fileRef.getDownloadURL().pipe(takeUntil(this.destroyed$)).subscribe(url => {
+      fileRef.getDownloadURL().pipe(untilDestroyed(this)).subscribe(url => {
         this.url = url;
         this.uploading = false;
         this.enableSave();
@@ -92,7 +90,5 @@ export class ProfilePage implements OnInit, OnDestroy {
     this.upload = false;
   }
   ngOnDestroy() {
-    this.destroyed$.next(true);
-    this.destroyed$.complete();
   }
 }

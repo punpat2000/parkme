@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
-import { Park } from 'src/models/carpark.model';
+import { Carpark } from 'src/models/carpark.model';
 
 @Component({
   selector: 'app-card-element',
@@ -8,18 +8,18 @@ import { Park } from 'src/models/carpark.model';
 })
 export class CardElementComponent implements OnInit, OnDestroy {
 
-  @Input() lot:Park;
+  @Input() lot: Carpark;
   @Input() uid: string;
   @Output() carUnbooked = new EventEmitter<string>();
 
   constructor() { }
 
-  ngOnInit() {
+  ngOnInit(): void {
   }
-  unbookCarpark(key:string){
+  unbookCarpark(key: string): void {
     this.carUnbooked.emit(key);
   }
-  ngOnDestroy():void{
+  ngOnDestroy(): void {
     this.carUnbooked.complete();
   }
 
