@@ -43,8 +43,8 @@ export class HomePage implements OnInit, OnDestroy {
       depth: 100,
       modifier: 1,
       slideShadows: true,
-    }
-  }
+    },
+  };
 
   displayCarpark(): void {
     database().ref('lots').on('value', resp => {

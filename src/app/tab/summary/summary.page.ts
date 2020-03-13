@@ -1,9 +1,9 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { database } from 'firebase';
 import { ProfiledbService } from '../../services/profiledb.service';
-import { ReplaySubject } from 'rxjs';
-import { takeUntil, filter } from 'rxjs/operators';
+import { filter } from 'rxjs/operators';
 import { Carpark} from 'src/models/carpark.model';
+import { untilDestroyed } from 'ngx-take-until-destroy';
 
 @Component({
   selector: 'app-summary',
@@ -14,7 +14,6 @@ export class SummaryPage implements OnInit, OnDestroy {
   lots: Array<Carpark>=[];
   uid: string = '';
   phonenumber: string;
-  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private profiledb: ProfiledbService) {
   }
@@ -22,17 +21,14 @@ export class SummaryPage implements OnInit, OnDestroy {
   ngOnInit() {
     this.profiledb.getProfile()
     .pipe(
-      takeUntil(this.destroyed$),
+      untilDestroyed(this),
       filter(data => typeof data !== 'undefined'))
     .subscribe(event => {
       this.uid = event.uid;
     });
     this.displayCarpark();
   }
-  ngOnDestroy(): void {
-    this.destroyed$.next(true);
-    this.destroyed$.complete();
-  }
+  ngOnDestroy(): void {}
 
 
   displayCarpark(): void {

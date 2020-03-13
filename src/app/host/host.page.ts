@@ -1,11 +1,9 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CarparkdbService } from '../services/carparkdb.service'
 import { ProfiledbService } from '../services/profiledb.service'
-import { User } from '../../models/user.model'
 import { database } from 'firebase'
-import { Observable, ReplaySubject } from 'rxjs';
 import { AngularFireStorage } from '@angular/fire/storage';
-import { takeUntil } from 'rxjs/operators';
+import { untilDestroyed } from 'ngx-take-until-destroy';
 
 @Component({
   selector: 'app-host',
@@ -14,27 +12,26 @@ import { takeUntil } from 'rxjs/operators';
 })
 export class HostPage implements OnInit, OnDestroy {
   userID: string;
-  name: string="";
-  phonenumber: string="";
-  location: string="";
-  comment: string="";
-  url: string="";
-  upload: boolean=false;
-  uploading: boolean=false;
-  edit: boolean=false;
-  cannotSubmit: boolean=true;
+  name: string = "";
+  phonenumber: string = "";
+  location: string = "";
+  comment: string = "";
+  url: string = "";
+  upload: boolean = false;
+  uploading: boolean = false;
+  edit: boolean = false;
+  cannotSubmit: boolean = true;
   info: any;
-  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(
     private carparkdb: CarparkdbService,
     private profiledb: ProfiledbService,
     private storage: AngularFireStorage
-  ) {}
+  ) { }
 
   ngOnInit() {
     const profileRef = this.profiledb.getProfile();
-    profileRef.pipe(takeUntil(this.destroyed$)).subscribe(resp => {
+    profileRef.pipe(untilDestroyed(this)).subscribe(resp => {
       this.userID = resp.uid;
       this.name = resp.name;
       this.phonenumber = resp.phonenumber;
@@ -44,11 +41,8 @@ export class HostPage implements OnInit, OnDestroy {
       }
     });
   }
-  
-  ngOnDestroy():void{
-    this.destroyed$.next(true);
-    this.destroyed$.complete();
-  }
+
+  ngOnDestroy(): void { }
 
   addCarpark() {
     this.carparkdb.addCarpark(this.location, this.comment, this.url);
@@ -80,7 +74,7 @@ export class HostPage implements OnInit, OnDestroy {
   }
 
   check() {
-    if (this.name=="" || this.phonenumber=="" || this.location=="" || this.comment=="" || this.url=="") {
+    if (this.name == "" || this.phonenumber == "" || this.location == "" || this.comment == "" || this.url == "") {
       this.cannotSubmit = true;
     }
     else {
@@ -91,11 +85,11 @@ export class HostPage implements OnInit, OnDestroy {
   uploadFile(event: FileList) {
     // The File object
     const file = event.item(0)
- 
+
     // Validation for Images Only
-    if (file.type.split('/')[0] !== 'image') { 
-     console.error('unsupported file type :( ')
-     return;
+    if (file.type.split('/')[0] !== 'image') {
+      console.error('unsupported file type :( ')
+      return;
     }
 
     this.uploading = true;
@@ -103,7 +97,7 @@ export class HostPage implements OnInit, OnDestroy {
     const path = `locationpictures/${new Date().getTime()}_${file.name}`;
     this.storage.upload(path, file).then(() => {
       const fileRef = this.storage.ref(path);
-      fileRef.getDownloadURL().pipe(takeUntil(this.destroyed$)).subscribe(url => {
+      fileRef.getDownloadURL().pipe(untilDestroyed(this)).subscribe(url => {
         this.url = url;
         this.uploading = false;
         this.check();
@@ -113,13 +107,13 @@ export class HostPage implements OnInit, OnDestroy {
   }
 
   editCarpark() {
-    database().ref('/lots/'+this.info.key).update({location: this.location, comment: this.comment, url: this.url});
-    this.profiledb.showAlert('Done!','Your location has been updated!' );
+    database().ref('/lots/' + this.info.key).update({ location: this.location, comment: this.comment, url: this.url });
+    this.profiledb.showAlert('Done!', 'Your location has been updated!');
     this.cannotSubmit = true;
   }
 
   deleteCarpark() {
-    database().ref('/lots/'+this.info.key).remove();
+    database().ref('/lots/' + this.info.key).remove();
     this.profiledb.setNotHost();
     this.location = "";
     this.comment = "";
