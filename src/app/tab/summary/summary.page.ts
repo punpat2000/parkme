@@ -19,10 +19,10 @@ export class SummaryPage implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.userService.getProfile()
+    this.userService.profile
     .pipe(
       untilDestroyed(this),
-      filter(data => typeof data !== 'undefined'))
+      filter(data => !!data && typeof data !== 'undefined'))
     .subscribe(event => {
       this.uid = event.uid;
     });
@@ -37,7 +37,7 @@ export class SummaryPage implements OnInit, OnDestroy {
         this.lots = [];
         resp.forEach(childSnapshot => {
           const lot = childSnapshot.val();
-          if (!lot.status && (this.userService.getId() === lot.host || this.userService.getId() === lot.user)) {
+          if (!lot.status && (this.userService.uid === lot.host || this.userService.uid === lot.user)) {
             lot.key = childSnapshot.key;
             this.lots.push(lot);
             //console.log(lot.status)

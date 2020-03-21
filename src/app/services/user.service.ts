@@ -2,10 +2,10 @@ import { Injectable, OnDestroy } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
 import { User } from '../../models/user.model';
-import { map, filter } from 'rxjs/operators';
+import { map, filter, tap } from 'rxjs/operators';
 import { AlertController } from '@ionic/angular'
-import { Observable, of } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
+import { Observable, of, from } from 'rxjs';
+import { switchMap, take } from 'rxjs/operators';
 import { untilDestroyed } from 'ngx-take-until-destroy';
 import * as _ from 'lodash';
 
@@ -25,6 +25,7 @@ export class UserService implements OnDestroy {
   ) {
     this.user$ = this.afAuth.authState.pipe(
       untilDestroyed(this),
+      tap(user => this.userId = user ? user.uid : null),
       switchMap(user => user ? this.db.doc<User>(`profiles/${user.uid}`).valueChanges() : of(null)),
     )
     this.afAuth.auth.onAuthStateChanged(user => {
@@ -57,43 +58,36 @@ export class UserService implements OnDestroy {
 
 
   async updateProfile(name: string, phonenumber: string, url: string) {
-    let info = {
-      displayName: name,
-      url: url,
-    }
-    if (phonenumber) {
-      info = _.assign(info, { phonenumber: phonenumber });
-    }
     if (name.length <= 0) {
       this.showAlert('Oh no!', 'Please enter name');
       console.log('error');
       return;
     }
+
     this.afAuth.auth.currentUser.updateProfile({ photoURL: url });
-    await this.db.collection<User>('profiles').doc(this.userId)
-      .update({
-        displayName: name,
-        phonenumber: phonenumber ? phonenumber : '',
-        url: url,
-      });
+    await this.profile
+      .pipe(take(1), map(user => user ? user.uid : null))
+      .toPromise()
+      .then(uid => {
+        if (uid) {
+          this.db.doc(`profiles/${uid}`).update({
+            displayName: name,
+            phonenumber: phonenumber ? phonenumber : '',
+            url: url,
+          })
+        };
+      })
+      .catch(console.log);
     this.showAlert('Done!', 'Your profile has been updated');
     console.log('Profile updated');
   }
 
-  get profile(): Observable<User> {
-    return this.user$;
+  get uid(): string {
+    return this.userId;
   }
 
-  getProfile() {
-    return this.db.collection<User>('profiles', ref => ref.where('uid', '==', this.userId))
-      .valueChanges()
-      .pipe(
-        map(profiles => {
-          const profile = profiles[0];
-          return profile;
-        }),
-        filter(value => typeof value !== 'undefined'),
-      );
+  get profile(): Observable<User> {
+    return this.user$;
   }
 
   getProfilebyID(userID: string) {
@@ -105,10 +99,6 @@ export class UserService implements OnDestroy {
         }),
         filter(value => typeof value !== 'undefined'),
       );
-  }
-
-  getId() {
-    return this.userId;
   }
 
   setNotHost() {

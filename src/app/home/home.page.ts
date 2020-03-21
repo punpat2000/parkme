@@ -21,7 +21,7 @@ export class HomePage implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {
-    this.userService.getProfile()
+    this.userService.profile
       .pipe(
         untilDestroyed(this),
         filter(data => !!data && typeof data !== 'undefined')

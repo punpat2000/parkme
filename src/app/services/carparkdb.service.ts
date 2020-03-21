@@ -16,7 +16,7 @@ export class CarparkdbService {
     try{
       const newData = database().ref('/lots').push();
     await newData.set({
-      host: this.userService.getId(),
+      host: this.userService.uid,
       user: "",
       status: true,
       location: location,
@@ -24,7 +24,7 @@ export class CarparkdbService {
       url: url,
       date: Date()
     });
-    await this.db.collection('profiles').doc(this.userService.getId()).update({host: true});
+    await this.db.doc(`profiles/${this.userService.uid}`).update({host: true});
     this.userService.showAlert('Done!', 'Your location has been added!');
     console.log('addcarpark succeeded');
     } catch(e){
