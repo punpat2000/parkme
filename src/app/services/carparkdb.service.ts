@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ProfiledbService } from './profiledb.service';
+import { UserService } from './user.service';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { database } from 'firebase';
 
@@ -8,7 +8,7 @@ import { database } from 'firebase';
 })
 export class CarparkdbService {
   constructor(
-    private profiledb: ProfiledbService,
+    private userService: UserService,
     private db: AngularFirestore
   ) { }
 
@@ -16,7 +16,7 @@ export class CarparkdbService {
     try{
       const newData = database().ref('/lots').push();
     await newData.set({
-      host: this.profiledb.getId(),
+      host: this.userService.getId(),
       user: "",
       status: true,
       location: location,
@@ -24,8 +24,8 @@ export class CarparkdbService {
       url: url,
       date: Date()
     });
-    await this.db.collection('profiles').doc(this.profiledb.getId()).update({host: true});
-    this.profiledb.showAlert('Done!', 'Your location has been added!');
+    await this.db.collection('profiles').doc(this.userService.getId()).update({host: true});
+    this.userService.showAlert('Done!', 'Your location has been added!');
     console.log('addcarpark succeeded');
     } catch(e){
       throw e;

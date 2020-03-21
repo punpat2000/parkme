@@ -1,7 +1,8 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { database } from 'firebase'
-import { ProfiledbService } from '../services/profiledb.service'
-import {untilDestroyed} from 'ngx-take-until-destroy';
+import { database } from 'firebase';
+import { UserService } from '../services/user.service';
+import { untilDestroyed } from 'ngx-take-until-destroy';
+import { filter } from 'rxjs/operators';
 
 
 @Component({
@@ -16,21 +17,26 @@ export class HomePage implements OnInit, OnDestroy {
   user: string;
 
   constructor(
-    private profiledb: ProfiledbService
-  ) {}
+    private userService: UserService
+  ) { }
 
   ngOnInit(): void {
-    this.profiledb.getProfile().pipe(untilDestroyed(this)).subscribe(event => {
-      if (event) {
-        this.displayname = event.name;
-        this.user = event.uid;
-      } else {
-        console.log('error');
-      }
-    });
+    this.userService.getProfile()
+      .pipe(
+        untilDestroyed(this),
+        filter(data => !!data && typeof data !== 'undefined')
+      )
+      .subscribe(event => {
+        if (event) {
+          this.displayname = event.displayName ? event.displayName : event.name;
+          this.user = event.uid;
+        } else {
+          console.log('error');
+        }
+      });
     this.displayCarpark();
   }
-  ngOnDestroy(): void{
+  ngOnDestroy(): void {
   }
 
   sliderConfig = {
@@ -60,10 +66,10 @@ export class HomePage implements OnInit, OnDestroy {
       }
     });
   }
-  bookCarpark(key:string){
-    database().ref('/lots/'+key).update({status:false,user:this.user});
+  bookCarpark(key: string) {
+    database().ref('/lots/' + key).update({ status: false, user: this.user });
   }
-  unbookCarpark(key:string){
-    database().ref('/lots/'+key).update({status:true,user:""});
+  unbookCarpark(key: string) {
+    database().ref('/lots/' + key).update({ status: true, user: "" });
   }
 }

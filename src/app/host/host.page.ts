@@ -1,9 +1,10 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CarparkdbService } from '../services/carparkdb.service'
-import { ProfiledbService } from '../services/profiledb.service'
+import { UserService } from '../services/user.service'
 import { database } from 'firebase'
 import { AngularFireStorage } from '@angular/fire/storage';
 import { untilDestroyed } from 'ngx-take-until-destroy';
+import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-host',
@@ -25,21 +26,25 @@ export class HostPage implements OnInit, OnDestroy {
 
   constructor(
     private carparkdb: CarparkdbService,
-    private profiledb: ProfiledbService,
+    private userService: UserService,
     private storage: AngularFireStorage
   ) { }
 
   ngOnInit() {
-    const profileRef = this.profiledb.getProfile();
-    profileRef.pipe(untilDestroyed(this)).subscribe(resp => {
-      this.userID = resp.uid;
-      this.name = resp.name;
-      this.phonenumber = resp.phonenumber;
-      if (resp.host) {
-        this.edit = true;
-        this.getCarpark();
-      }
-    });
+    this.userService.profile
+      .pipe(
+        untilDestroyed(this),
+        filter(data => !!data && typeof data !== 'undefined'),
+      )
+      .subscribe(resp => {
+        this.userID = resp.uid;
+        this.name = resp.displayName ? resp.displayName : resp.name;
+        this.phonenumber = resp.phonenumber;
+        if (resp.host) {
+          this.edit = true;
+          this.getCarpark();
+        }
+      });
   }
 
   ngOnDestroy(): void { }
@@ -108,18 +113,18 @@ export class HostPage implements OnInit, OnDestroy {
 
   editCarpark() {
     database().ref('/lots/' + this.info.key).update({ location: this.location, comment: this.comment, url: this.url });
-    this.profiledb.showAlert('Done!', 'Your location has been updated!');
+    this.userService.showAlert('Done!', 'Your location has been updated!');
     this.cannotSubmit = true;
   }
 
   deleteCarpark() {
     database().ref('/lots/' + this.info.key).remove();
-    this.profiledb.setNotHost();
+    this.userService.setNotHost();
     this.location = "";
     this.comment = "";
     this.url = "";
     this.edit = false;
-    this.profiledb.showAlert('Done!', 'Your location has been deleted!')
+    this.userService.showAlert('Done!', 'Your location has been deleted!')
     this.check();
   }
 }

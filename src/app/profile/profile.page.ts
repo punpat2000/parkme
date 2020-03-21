@@ -1,9 +1,11 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { UsermgmtService } from '../services/usermgmt.service'
-import { ProfiledbService } from '../services/profiledb.service'
+import { UserService } from '../services/user.service'
 import { AngularFireStorage } from '@angular/fire/storage';
 import { filter } from 'rxjs/operators';
 import { untilDestroyed } from 'ngx-take-until-destroy';
+import { User } from '../../models/user.model';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-profile',
@@ -11,39 +13,34 @@ import { untilDestroyed } from 'ngx-take-until-destroy';
   styleUrls: ['./profile.page.scss'],
 })
 export class ProfilePage implements OnInit, OnDestroy {
-  notChanged: Boolean = true
+  notChanged: boolean = true
   upload: boolean = false
   uploading: boolean = false
-
-  name: string ='';
-  phonenumber: string ='';
-  username: string='';
-  url: string='';
+  user$: Observable<User>;
+  name: string = '';
+  phonenumber: string = '';
+  username: string = '';
+  url: string = '';
   showBar: boolean = false;
 
   constructor(
     private userm: UsermgmtService,
-    private profiledb: ProfiledbService,
+    private userService: UserService,
     private storage: AngularFireStorage
   ) { }
 
   ngOnInit() {
-    const profileRef$ = this.profiledb.getProfile();
-    profileRef$
+    this.user$ = this.userService.profile
       .pipe(
         untilDestroyed(this),
-        filter(data => typeof data !== 'undefined')
-      )
-      .subscribe(event => {
-        if (event) {
-          this.name = event.name;
-          this.phonenumber = event.phonenumber;
-          this.url = event.url;
-          this.username = event.username;
-        } else {
-          console.log(`error`);
-        }
-      });
+        filter(data => !!data && typeof data !== 'undefined')
+      );
+    this.user$.subscribe(data => {
+      this.name = data.displayName ? data.displayName : data.name;
+      this.phonenumber = data.phonenumber;
+      this.url = data.url;
+      this.username = data.username;
+    })
   }
 
   logout() {
@@ -56,7 +53,7 @@ export class ProfilePage implements OnInit, OnDestroy {
 
   async save(): Promise<void> {
     this.showBar = true;
-    await this.profiledb.updateProfile(this.name, this.phonenumber, this.url);
+    await this.userService.updateProfile(this.name, this.phonenumber, this.url);
     this.showBar = false;
     this.notChanged = true;
   }
