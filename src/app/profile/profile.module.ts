@@ -8,7 +8,6 @@ import { ProfilePageRoutingModule } from './profile-routing.module';
 
 import { ProfilePage } from './profile.page';
 
-import {MatProgressBarModule} from '@angular/material/progress-bar';
 
 @NgModule({
   imports: [
@@ -16,7 +15,6 @@ import {MatProgressBarModule} from '@angular/material/progress-bar';
     FormsModule,
     IonicModule,
     ProfilePageRoutingModule,
-    MatProgressBarModule,
   ],
   declarations: [ProfilePage]
 })

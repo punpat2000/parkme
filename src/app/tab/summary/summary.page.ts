@@ -18,7 +18,7 @@ export class SummaryPage implements OnInit, OnDestroy {
   constructor(private userService: UserService) {
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.userService.profile
     .pipe(
       untilDestroyed(this),
@@ -49,7 +49,7 @@ export class SummaryPage implements OnInit, OnDestroy {
     });
   }
 
-  unbookCarpark(key: string) {
+  unbookCarpark(key: string): void {
     database().ref('/lots/' + key).update({ status: true, user: "" }).catch(e => console.log(e));
   }
 

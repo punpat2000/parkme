@@ -23,12 +23,12 @@ export class UserService implements OnDestroy {
     private db: AngularFirestore,
     private alertController: AlertController
   ) {
-    this.user$ = this.afAuth.authState.pipe(
+    this.user$ = this.afAuth.authState.pipe<firebase.User, firebase.User, User | null>(
       untilDestroyed(this),
       tap(user => this.userId = user ? user.uid : null),
       switchMap(user => user ? this.db.doc<User>(`profiles/${user.uid}`).valueChanges() : of(null)),
     )
-    this.afAuth.auth.onAuthStateChanged(user => {
+    this.afAuth.auth.onAuthStateChanged( (user: firebase.User) => {
       if (user) {
         this.userId = user.uid;
         const userRef: AngularFirestoreDocument<User> = this.db.doc(`profiles/${user.uid}`);
@@ -57,7 +57,7 @@ export class UserService implements OnDestroy {
   }
 
 
-  async updateProfile(name: string, phonenumber: string, url: string) {
+  async updateProfile(name: string, phonenumber: string, url: string): Promise<void> {
     if (name.length <= 0) {
       this.showAlert('Oh no!', 'Please enter name');
       console.log('error');
@@ -90,18 +90,7 @@ export class UserService implements OnDestroy {
     return this.user$;
   }
 
-  getProfilebyID(userID: string) {
-    return this.db.collection<User>('profiles', ref => ref.where('uid', '==', userID)).valueChanges()
-      .pipe(
-        map(profiles => {
-          const profile = profiles[0];
-          return profile;
-        }),
-        filter(value => typeof value !== 'undefined'),
-      );
-  }
-
-  setNotHost() {
+  setNotHost(): void {
     this.db.collection('profiles')
       .doc(this.userId)
       .update({ host: false })

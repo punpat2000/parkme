@@ -6,6 +6,11 @@ import { TabPage } from './tab.page';
 const routes: Routes = [
   {
     path: '',
+    redirectTo: 'profile',
+    pathMatch: 'full'
+  },
+  {
+    path: '',
     component: TabPage,
     children: [
       { 
@@ -19,11 +24,6 @@ const routes: Routes = [
       {
         path: 'host',
         loadChildren: () => import('../host/host.module').then( m => m.HostPageModule)
-      },
-      {
-        path: '',
-        redirectTo: 'profile',
-        pathMatch: 'full'
       },
       {
         path: 'summary',

@@ -29,9 +29,9 @@ export class ProfilePage implements OnInit, OnDestroy {
     private storage: AngularFireStorage
   ) { }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.user$ = this.userService.profile
-      .pipe(
+      .pipe<User, User>(
         untilDestroyed(this),
         filter(data => !!data && typeof data !== 'undefined')
       );

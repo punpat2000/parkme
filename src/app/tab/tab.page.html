@@ -1,10 +1,10 @@
+<ion-progress-bar *ngIf="$loadingStatus | async" type="indeterminate" style="position: fixed; z-index: 1;"></ion-progress-bar>
 <ion-tabs>
   <ion-tab-bar slot="bottom">
     <ion-tab-button tab="home">
       <ion-icon name="home-outline"></ion-icon>
       <ion-label>Home</ion-label>
     </ion-tab-button>
-
     <ion-tab-button tab="host">
       <ion-icon name="people-outline"></ion-icon>
       <ion-label>Host</ion-label>
