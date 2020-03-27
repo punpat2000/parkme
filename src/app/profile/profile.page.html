@@ -27,11 +27,9 @@
         </div>
       </div>
       <ion-button expand="block" size="small" fill="clear" (click)="enableUpload()">edit</ion-button>
-      <div *ngIf="upload">
-        <div class="fileUpload btn btn-primary">
-          <input id="uploadBtn" type="file" class="upload" (change)="uploadFile($event.target.files)" />
+        <div class="fileUpload btn btn-primary" hidden=true>
+          <input #uploadBtn id="uploadBtn" type="file" class="upload" (change)="uploadFile($event.target.files)" />
         </div>
-      </div>
     </div>
     <div>
       <ion-item>
