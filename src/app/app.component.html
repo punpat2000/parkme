@@ -1,3 +1,4 @@
 <ion-app>
+  <ion-progress-bar *ngIf="$loadingStatus | async" type="indeterminate" style="position: fixed; z-index: 1;"></ion-progress-bar>
   <ion-router-outlet></ion-router-outlet>
 </ion-app>
