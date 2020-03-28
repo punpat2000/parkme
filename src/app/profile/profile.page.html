@@ -27,8 +27,8 @@
         </div>
       </div>
       <ion-button expand="block" size="small" fill="clear" (click)="enableUpload()">edit</ion-button>
-        <div class="fileUpload btn btn-primary" hidden=true>
-          <input #uploadBtn id="uploadBtn" type="file" class="upload" (change)="uploadFile($event.target.files)" />
+        <div hidden=true>
+          <input ref-uploadBtn type="file" (change)="uploadFile($event.target.files)" />
         </div>
     </div>
     <div>
