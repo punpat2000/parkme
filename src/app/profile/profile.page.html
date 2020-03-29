@@ -8,13 +8,8 @@
 </ion-header>
 
 
-<div *ngIf="uploading" id='dim_wrapper'
-  style='width:100%; height:100%; background:#000; z-index:10; position: fixed; opacity: 0.5'>&nbsp;</div>
-<script>
-  $("#dim_wrapper").animate({
-    'opacity': 0.4
-  });
-</script>
+<div *ngIf="uploading" style='width:100%; height:100%; background:#000; z-index:10; position: fixed; opacity: 0.2'>
+  &nbsp;</div>
 
 <ion-content>
   <ion-progress-bar type="indeterminate" *ngIf="showBar" style="position: fixed;"></ion-progress-bar>
@@ -26,10 +21,8 @@
           <ion-spinner *ngIf="uploading"></ion-spinner>
         </div>
       </div>
-      <ion-button expand="block" size="small" fill="clear" (click)="enableUpload()">edit</ion-button>
-        <div hidden=true>
-          <input ref-uploadBtn type="file" (change)="uploadFile($event.target.files)" />
-        </div>
+      <ion-button expand="block" size="small" fill="clear" (click)="uploadBtn.click()">EDIT</ion-button>
+      <input ref-uploadBtn type="file" (change)="uploadFile($event.target.files)" hidden />
     </div>
     <div>
       <ion-item>

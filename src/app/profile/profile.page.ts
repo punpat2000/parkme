@@ -1,5 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
-import { UsermgmtService } from '../services/usermgmt.service'
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { UserService } from '../services/user.service'
 import { AngularFireStorage } from '@angular/fire/storage';
 import { filter } from 'rxjs/operators';
@@ -21,12 +20,10 @@ export class ProfilePage implements OnInit, OnDestroy {
   username: string = '';
   url: string = '';
   showBar: boolean = false;
-  @ViewChild('uploadBtn') btn: ElementRef;
 
   constructor(
-    private userm: UsermgmtService,
     private userService: UserService,
-    private storage: AngularFireStorage
+    private storage: AngularFireStorage,
   ) { }
 
   ngOnInit(): void {
@@ -44,7 +41,7 @@ export class ProfilePage implements OnInit, OnDestroy {
   }
 
   logout() {
-    this.userm.logout();
+    this.userService.logout();
   }
 
   enableSave(event?: Event) {
@@ -56,10 +53,6 @@ export class ProfilePage implements OnInit, OnDestroy {
     await this.userService.updateProfile(this.name, this.phonenumber, this.url);
     this.showBar = false;
     this.notChanged = true;
-  }
-
-  enableUpload() {
-    this.btn.nativeElement.click();
   }
 
   uploadFile(event: FileList) {

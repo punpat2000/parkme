@@ -2,12 +2,14 @@ import { Injectable, OnDestroy } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
 import { User } from '../../models/user.model';
-import { map, filter, tap } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 import { AlertController } from '@ionic/angular'
 import { Observable, of, from } from 'rxjs';
 import { switchMap, take } from 'rxjs/operators';
 import { untilDestroyed } from 'ngx-take-until-destroy';
 import * as _ from 'lodash';
+import { Router } from '@angular/router';
+
 
 @Injectable({
   providedIn: 'root'
@@ -21,6 +23,7 @@ export class UserService implements OnDestroy {
   constructor(
     private afAuth: AngularFireAuth,
     private db: AngularFirestore,
+    private router: Router,
     private alertController: AlertController
   ) {
     this.user$ = this.afAuth.authState.pipe<firebase.User, firebase.User, User | null>(
@@ -28,7 +31,7 @@ export class UserService implements OnDestroy {
       tap(user => this.userId = user ? user.uid : null),
       switchMap(user => user ? this.db.doc<User>(`profiles/${user.uid}`).valueChanges() : of(null)),
     )
-    this.afAuth.auth.onAuthStateChanged( (user: firebase.User) => {
+    this.afAuth.auth.onAuthStateChanged((user: firebase.User) => {
       if (user) {
         this.userId = user.uid;
         const userRef: AngularFirestoreDocument<User> = this.db.doc(`profiles/${user.uid}`);
@@ -91,10 +94,16 @@ export class UserService implements OnDestroy {
   }
 
   setNotHost(): void {
-    this.db.collection('profiles')
-      .doc(this.userId)
-      .update({ host: false })
-      .catch(e => console.log(e));
+    this.db.doc(`profiles/${this.userId}`).update({ host: false }).catch(console.log);
+  }
+
+  async logout(): Promise<void> {
+    try {
+      await this.afAuth.auth.signOut();
+      this.router.navigate(['login']);
+    } catch (e) {
+      throw new Error();
+    }
   }
 
 }
