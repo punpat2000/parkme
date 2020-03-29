@@ -18,7 +18,6 @@ export class HostPage implements OnInit, OnDestroy {
   location: string = "";
   comment: string = "";
   url: string = "";
-  upload: boolean = false;
   uploading: boolean = false;
   edit: boolean = false;
   cannotSubmit: boolean = true;
@@ -74,9 +73,6 @@ export class HostPage implements OnInit, OnDestroy {
     });
   }
 
-  enableUpload() {
-    this.upload = true
-  }
 
   check() {
     if (this.name == "" || this.phonenumber == "" || this.location == "" || this.comment == "" || this.url == "") {
@@ -108,7 +104,6 @@ export class HostPage implements OnInit, OnDestroy {
         this.check();
       })
     })
-    this.upload = false;
   }
 
   editCarpark() {
