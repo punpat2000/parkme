@@ -33,8 +33,8 @@ export class ProfilePage implements OnInit, OnDestroy {
         filter(data => !!data && typeof data !== 'undefined')
       );
     this.user$.subscribe(data => {
-      this.name = data.displayName ? data.displayName : data.name;
-      this.phonenumber = data.phonenumber;
+      this.name = data.displayName ?? data.name;
+      this.phonenumber = data.phonenumber ?? '';
       this.url = data.url;
       this.username = data.username;
     })
