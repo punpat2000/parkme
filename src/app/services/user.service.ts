@@ -4,8 +4,8 @@ import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firest
 import { User } from '../../models/user.model';
 import { map, tap } from 'rxjs/operators';
 import { AlertController } from '@ionic/angular'
-import { Observable, of, from } from 'rxjs';
-import { switchMap, take } from 'rxjs/operators';
+import { Observable, of } from 'rxjs';
+import { switchMap, take, shareReplay } from 'rxjs/operators';
 import { untilDestroyed } from 'ngx-take-until-destroy';
 import * as _ from 'lodash';
 import { Router } from '@angular/router';
@@ -17,8 +17,8 @@ import { Router } from '@angular/router';
 export class UserService implements OnDestroy {
 
   private userId: string;
-  name: string;
-  user$: Observable<User>;
+  public name: string;
+  private user$: Observable<User>;
 
   constructor(
     private afAuth: AngularFireAuth,
@@ -26,10 +26,11 @@ export class UserService implements OnDestroy {
     private router: Router,
     private alertController: AlertController
   ) {
-    this.user$ = this.afAuth.authState.pipe<firebase.User, firebase.User, User | null>(
+    this.user$ = this.afAuth.authState.pipe<firebase.User, firebase.User, User, User>(
       untilDestroyed(this),
       tap(user => this.userId = user ? user.uid : null),
       switchMap(user => user ? this.db.doc<User>(`profiles/${user.uid}`).valueChanges() : of(null)),
+      shareReplay(1),
     )
     this.afAuth.auth.onAuthStateChanged((user: firebase.User) => {
       if (user) {
