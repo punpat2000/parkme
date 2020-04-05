@@ -4,7 +4,7 @@ import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firest
 import { User } from '../../models/user.model';
 import { map, tap } from 'rxjs/operators';
 import { AlertController } from '@ionic/angular'
-import { Observable, of } from 'rxjs';
+import { Observable, of, ReplaySubject } from 'rxjs';
 import { switchMap, take, shareReplay } from 'rxjs/operators';
 import { untilDestroyed } from 'ngx-take-until-destroy';
 import * as _ from 'lodash';
@@ -26,6 +26,10 @@ export class UserService implements OnDestroy {
     private router: Router,
     private alertController: AlertController
   ) {
+    this.userInitialize();
+  }
+
+  private userInitialize(): void {
     this.user$ = this.afAuth.authState.pipe<firebase.User, firebase.User, User, User>(
       untilDestroyed(this),
       tap(user => this.userId = user ? user.uid : null),
@@ -36,15 +40,20 @@ export class UserService implements OnDestroy {
       if (user) {
         this.userId = user.uid;
         const userRef: AngularFirestoreDocument<User> = this.db.doc(`profiles/${user.uid}`);
-        const data: User = {
-          username: user.email,
-          uid: user.uid,
-          name: user.displayName,
-          url: user.photoURL
-        }
+        const data: User = this.userDefault(user);
         userRef.set(data, { merge: true });
       }
     });
+  }
+
+  private userDefault(user: firebase.User): User {
+    const data: User = {
+      username: user.email,
+      uid: user.uid,
+      name: user.displayName,
+      url: user.photoURL
+    }
+    return data;
   }
 
   ngOnDestroy() { }
