@@ -5,7 +5,7 @@ import { User } from '../../models/user.model';
 import { map, tap } from 'rxjs/operators';
 import { AlertController } from '@ionic/angular'
 import { Observable, of, ReplaySubject } from 'rxjs';
-import { switchMap, take, shareReplay } from 'rxjs/operators';
+import { switchMap, take, shareReplay, filter } from 'rxjs/operators';
 import { untilDestroyed } from 'ngx-take-until-destroy';
 import * as _ from 'lodash';
 import { Router } from '@angular/router';
@@ -35,15 +35,20 @@ export class UserService implements OnDestroy {
       tap(user => this.userId = user ? user.uid : null),
       switchMap(user => user ? this.db.doc<User>(`profiles/${user.uid}`).valueChanges() : of(null)),
       shareReplay(1),
-    )
-    this.afAuth.auth.onAuthStateChanged((user: firebase.User) => {
-      if (user) {
+    );
+    const onAuthStateChanged$: ReplaySubject<firebase.User> = new ReplaySubject<firebase.User>(1);
+    this.afAuth.auth.onAuthStateChanged(onAuthStateChanged$);
+    onAuthStateChanged$
+      .pipe(filter(user => !!user))
+      .subscribe((user: firebase.User) => {
         this.userId = user.uid;
         const userRef: AngularFirestoreDocument<User> = this.db.doc(`profiles/${user.uid}`);
-        const data: User = this.userDefault(user);
-        userRef.set(data, { merge: true });
-      }
-    });
+        userRef.ref.get().then(doc => {
+          if (doc.exists) return;
+          const data: User = this.userDefault(user);
+          userRef.set(data, { merge: true });
+        })
+      });
   }
 
   private userDefault(user: firebase.User): User {
