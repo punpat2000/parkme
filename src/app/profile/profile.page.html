@@ -7,7 +7,7 @@
   </ion-toolbar>
 </ion-header>
 
-
+<h1>{{user$ | asyncPluck: 'phonenumber'}}</h1>
 <div *ngIf="uploading" style='width:100%; height:100%; background:#000; z-index:10; position: fixed; opacity: 0.2'>
   &nbsp;</div>
 
@@ -35,7 +35,7 @@
       </ion-item>
       <ion-item>
         <ion-label position="floating" color="dark">Email</ion-label>
-        <ion-input value={{username}} disabled=true></ion-input>
+        <ion-input value={{user$ | asyncPluck: 'username'}} disabled=true></ion-input>
       </ion-item>
     </div>
     <ion-col>

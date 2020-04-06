@@ -7,6 +7,7 @@ import { IonicModule } from '@ionic/angular';
 import { ProfilePageRoutingModule } from './profile-routing.module';
 
 import { ProfilePage } from './profile.page';
+import { AsyncPluckPipe } from '../pipes/async-pluck.pipe';
 
 
 @NgModule({
@@ -16,6 +17,6 @@ import { ProfilePage } from './profile.page';
     IonicModule,
     ProfilePageRoutingModule,
   ],
-  declarations: [ProfilePage]
+  declarations: [ProfilePage, AsyncPluckPipe]
 })
 export class ProfilePageModule {}

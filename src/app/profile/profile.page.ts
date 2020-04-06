@@ -17,7 +17,6 @@ export class ProfilePage implements OnInit, OnDestroy {
   user$: Observable<User>;
   name: string = '';
   phonenumber: string = '';
-  username: string = '';
   url: string = '';
   showBar: boolean = false;
 
@@ -36,7 +35,6 @@ export class ProfilePage implements OnInit, OnDestroy {
       this.name = data.displayName ?? data.name;
       this.phonenumber = data.phonenumber ?? '';
       this.url = data.url;
-      this.username = data.username;
     })
   }
 
