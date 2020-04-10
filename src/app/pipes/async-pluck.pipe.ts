@@ -13,7 +13,7 @@ import {
 import { Observable, SubscriptionLike } from 'rxjs';
 import { pluck } from 'rxjs/operators';
 import { invalidPipeArgumentError, invalidObservablePropertyError } from './invalid-pipe-argument-error';
-
+import { isString } from 'lodash';
 
 class ObservableStrategy {
   constructor() { }
@@ -66,7 +66,7 @@ export class AsyncPluckPipe implements OnDestroy, PipeTransform {
     if (!Array.isArray(properties))
       throw invalidObservablePropertyError(AsyncPluckPipe, properties);
     for (let i = 0; i < properties.length; i++)
-      if (typeof properties[i] !== 'string')
+      if (!isString(properties[i]))
         throw invalidObservablePropertyError(AsyncPluckPipe, properties[i]);
 
     // ดfirst case, fresh observable

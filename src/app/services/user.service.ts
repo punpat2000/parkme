@@ -2,7 +2,7 @@ import { Injectable, OnDestroy } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
 import { User } from '../../models/user.model';
-import { map, tap } from 'rxjs/operators';
+import { map, tap, pluck } from 'rxjs/operators';
 import { AlertController } from '@ionic/angular'
 import { Observable, of, ReplaySubject } from 'rxjs';
 import { switchMap, take, shareReplay, filter } from 'rxjs/operators';
@@ -39,16 +39,21 @@ export class UserService implements OnDestroy {
     const onAuthStateChanged$: ReplaySubject<firebase.User> = new ReplaySubject<firebase.User>(1);
     this.afAuth.auth.onAuthStateChanged(onAuthStateChanged$);
     onAuthStateChanged$
-      .pipe(filter(user => !!user))
-      .subscribe((user: firebase.User) => {
-        this.userId = user.uid;
-        const userRef: AngularFirestoreDocument<User> = this.db.doc(`profiles/${user.uid}`);
-        userRef.ref.get().then(doc => {
-          if (doc.exists) return;
-          const data: User = this.userDefault(user);
-          userRef.set(data, { merge: true });
-        })
+      .pipe(filter(user => !_.isNil(user)))
+      .subscribe({
+        next: this._checkUserDoc.bind(this),
+        error: console.log
       });
+  }
+
+  private _checkUserDoc(user: firebase.User): void {
+    this.userId = user.uid;
+    const userRef: AngularFirestoreDocument<User> = this.db.doc(`profiles/${user.uid}`);
+    userRef.ref.get().then(doc => {
+      if (doc.exists) return;
+      const data: User = this.userDefault(user);
+      userRef.set(data, { merge: true });
+    })
   }
 
   private userDefault(user: firebase.User): User {
@@ -84,7 +89,7 @@ export class UserService implements OnDestroy {
 
     this.afAuth.auth.currentUser.updateProfile({ photoURL: url });
     await this.profile
-      .pipe(take(1), map(user => user ? user.uid : null))
+      .pipe(take(1), pluck('uid'))
       .toPromise()
       .then(uid => {
         if (uid) {

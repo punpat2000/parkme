@@ -5,6 +5,8 @@ import { filter } from 'rxjs/operators';
 import { untilDestroyed } from 'ngx-take-until-destroy';
 import { User } from '../../models/user.model';
 import { Observable } from 'rxjs';
+import { isNil } from 'lodash';
+import { shareReplay, take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-profile',
@@ -17,7 +19,7 @@ export class ProfilePage implements OnInit, OnDestroy {
   user$: Observable<User>;
   name: string = '';
   phonenumber: string = '';
-  url: string = '';
+  url: string = null;
   showBar: boolean = false;
 
   constructor(
@@ -27,9 +29,10 @@ export class ProfilePage implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.user$ = this.userService.profile
-      .pipe<User, User>(
+      .pipe(
         untilDestroyed(this),
-        filter(data => !!data && typeof data !== 'undefined')
+        filter(data => !isNil(data)),
+        shareReplay(1)
       );
     this.user$.subscribe(data => {
       this.name = data.displayName ?? data.name;
@@ -51,6 +54,7 @@ export class ProfilePage implements OnInit, OnDestroy {
     await this.userService.updateProfile(this.name, this.phonenumber, this.url);
     this.showBar = false;
     this.notChanged = true;
+    this.url = null;
   }
 
   uploadFile(event: FileList) {
@@ -68,7 +72,7 @@ export class ProfilePage implements OnInit, OnDestroy {
     const path = `profilepictures/${new Date().getTime()}_${file.name}`;
     this.storage.upload(path, file).then(() => {
       const fileRef = this.storage.ref(path);
-      fileRef.getDownloadURL().pipe(untilDestroyed(this)).subscribe(url => {
+      fileRef.getDownloadURL().pipe(take(1)).subscribe(url => {
         this.url = url;
         this.uploading = false;
         this.enableSave();
