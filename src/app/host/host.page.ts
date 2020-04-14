@@ -5,6 +5,7 @@ import { database } from 'firebase'
 import { AngularFireStorage } from '@angular/fire/storage';
 import { untilDestroyed } from 'ngx-take-until-destroy';
 import { filter } from 'rxjs/operators';
+import { isNil } from 'lodash';
 
 @Component({
   selector: 'app-host',
@@ -33,7 +34,7 @@ export class HostPage implements OnInit, OnDestroy {
     this.userService.profile
       .pipe(
         untilDestroyed(this),
-        filter(data => !!data && typeof data !== 'undefined'),
+        filter(data => !isNil(data)),
       )
       .subscribe(resp => {
         this.userID = resp.uid;
