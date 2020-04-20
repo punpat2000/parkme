@@ -1,9 +1,8 @@
 import { Injectable, OnDestroy } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { Subject, Observable } from 'rxjs';
 import { untilDestroyed } from 'ngx-take-until-destroy';
 import {
   Router,
-  ChildActivationStart,
   NavigationCancel,
   NavigationEnd,
   NavigationError,
@@ -15,7 +14,7 @@ import {
 })
 export class LoadingEventService implements OnDestroy {
 
-  private _loadingEvent: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
+  private _loadingEvent: Subject<boolean> = new Subject<boolean>();
 
   constructor(
     private router: Router
@@ -27,10 +26,7 @@ export class LoadingEventService implements OnDestroy {
     this.router.events
       .pipe(untilDestroyed(this))
       .subscribe(event => {
-        if (
-          event instanceof NavigationStart ||
-          event instanceof ChildActivationStart
-        ) {
+        if (event instanceof NavigationStart) {
           this.show();
         } else if (
           event instanceof NavigationEnd ||
@@ -53,4 +49,6 @@ export class LoadingEventService implements OnDestroy {
   hide(): void {
     this._loadingEvent.next(false);
   }
+
+  
 }

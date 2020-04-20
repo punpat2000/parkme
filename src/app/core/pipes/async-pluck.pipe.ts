@@ -46,12 +46,9 @@ export class AsyncPluckPipe implements OnDestroy, PipeTransform {
   private _latestReturnedValue: any = null;
   private _subscription: SubscriptionLike | null = null;
   private _obj: Observable<any> | EventEmitter<any> | null = null;
-  private _strategy: ObservableStrategy = null!!;
-  // private _property: any; for future feature: async properties
+  private _strategy: ObservableStrategy = null!;
 
-  constructor(
-    private _ref: ChangeDetectorRef
-  ) { console.log(!!this._strategy);}
+  constructor(private _ref: ChangeDetectorRef) { }
 
   ngOnDestroy(): void {
     if (this._subscription)
@@ -62,33 +59,26 @@ export class AsyncPluckPipe implements OnDestroy, PipeTransform {
   transform<T>(obj: undefined, ...properties: Array<string | unknown>): undefined;
   transform<T>(obj: Observable<T> | null | undefined, ...properties: Array<string | unknown>): T | null;
   transform(obj: Observable<any> | null | undefined, ...properties: Array<string | unknown>): any {
-    // invalid property caught
     if (!Array.isArray(properties))
       throw invalidObservablePropertyError(AsyncPluckPipe, properties);
     for (let i = 0; i < properties.length; i++)
       if (!isString(properties[i]))
         throw invalidObservablePropertyError(AsyncPluckPipe, properties[i]);
 
-    // ดfirst case, fresh observable
     if (!this._obj) {
       if (obj)
         this._subscribe(obj, properties as Array<string>);
       this._latestReturnedValue = this._latestValue;
       return this._latestValue;
     }
-    // second case, observable changes
     if (obj !== this._obj) {
-      // dispose the old one first
       this._dispose();
-      // recursively called itself to go back to the first state
       return this.transform(obj as any, properties as Array<string>);
     }
 
-    // check if the latest value and the latest return value are identical. if so then ok
     if (looseIdentical(this._latestValue, this._latestReturnedValue))
       return this._latestReturnedValue;
 
-    // in case the result has changed even tho the reference hasn't
     this._latestReturnedValue = this._latestValue;
     return WrappedValue.wrap(this._latestValue);
   }

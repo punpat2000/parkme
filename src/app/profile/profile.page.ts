@@ -1,9 +1,9 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { UserService } from '../services/user.service'
+import { UserService } from '../core/services';
 import { AngularFireStorage } from '@angular/fire/storage';
 import { filter } from 'rxjs/operators';
 import { untilDestroyed } from 'ngx-take-until-destroy';
-import { User } from '../../models/user.model';
+import { User } from '../core/models';
 import { Observable } from 'rxjs';
 import { isNil } from 'lodash';
 import { shareReplay, take } from 'rxjs/operators';

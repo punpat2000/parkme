@@ -1,6 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { CarparkdbService } from '../services/carparkdb.service'
-import { UserService } from '../services/user.service'
+import { UserService, CarparkService } from '../core/services';
 import { database } from 'firebase'
 import { AngularFireStorage } from '@angular/fire/storage';
 import { untilDestroyed } from 'ngx-take-until-destroy';
@@ -25,7 +24,7 @@ export class HostPage implements OnInit, OnDestroy {
   info: any;
 
   constructor(
-    private carparkdb: CarparkdbService,
+    private cps: CarparkService,
     private userService: UserService,
     private storage: AngularFireStorage
   ) { }
@@ -50,7 +49,7 @@ export class HostPage implements OnInit, OnDestroy {
   ngOnDestroy(): void { }
 
   addCarpark() {
-    this.carparkdb.addCarpark(this.location, this.comment, this.url);
+    this.cps.addCarpark(this.location, this.comment, this.url);
     this.cannotSubmit = true;
   }
 

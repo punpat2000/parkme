@@ -1,8 +1,8 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { database } from 'firebase';
-import { UserService } from 'src/app/services/user.service';
+import { UserService } from 'src/app/core/services';
 import { filter } from 'rxjs/operators';
-import { Carpark} from 'src/models/carpark.model';
+import { Carpark } from 'src/app/core/models';
 import { untilDestroyed } from 'ngx-take-until-destroy';
 
 @Component({

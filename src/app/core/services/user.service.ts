@@ -1,8 +1,8 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
-import { User } from '../../models/user.model';
-import { map, tap, pluck } from 'rxjs/operators';
+import { User } from '../models';
+import { tap, pluck } from 'rxjs/operators';
 import { AlertController } from '@ionic/angular'
 import { Observable, of, ReplaySubject } from 'rxjs';
 import { switchMap, take, shareReplay, filter } from 'rxjs/operators';

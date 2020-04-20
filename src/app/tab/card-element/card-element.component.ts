@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
-import { Carpark } from 'src/models/carpark.model';
+import { Carpark } from 'src/app/core/models';
 
 @Component({
   selector: 'app-card-element',

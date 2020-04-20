@@ -1,23 +1,19 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-
 import { IonicModule } from '@ionic/angular';
-
 import { ProfilePageRoutingModule } from './profile-routing.module';
-
 import { ProfilePage } from './profile.page';
-import { AsyncPluckPipe } from '../pipes/async-pluck.pipe';
-import { NonNullPipe } from '../pipes/non-null.pipe';
-
+import { PipesModule } from '../core/pipes.module';
 
 @NgModule({
+  declarations: [ProfilePage],
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
+    PipesModule,
     ProfilePageRoutingModule,
   ],
-  declarations: [ProfilePage, AsyncPluckPipe, NonNullPipe]
 })
 export class ProfilePageModule {}

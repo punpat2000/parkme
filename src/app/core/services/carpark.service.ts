@@ -6,7 +6,7 @@ import { database } from 'firebase';
 @Injectable({
   providedIn: 'root'
 })
-export class CarparkdbService {
+export class CarparkService {
   constructor(
     private userService: UserService,
     private db: AngularFirestore
