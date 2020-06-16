@@ -20,8 +20,7 @@
           <ion-spinner *ngIf="uploading"></ion-spinner>
         </div>
       </div>
-      <ion-button expand="block" size="small" fill="clear" (click)="uploadBtn.click()">EDIT</ion-button>
-      <input ref-uploadBtn type="file" (change)="uploadFile($event.target.files)" hidden />
+      <ion-button expand="block" size="small" fill="clear" upload-btn (handleFile)="uploadFile($event)">EDIT</ion-button>
     </div>
     <div>
       <ion-item>

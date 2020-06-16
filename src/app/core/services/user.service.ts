@@ -9,7 +9,7 @@ import { switchMap, take, shareReplay, filter } from 'rxjs/operators';
 import { untilDestroyed } from 'ngx-take-until-destroy';
 import * as _ from 'lodash';
 import { Router } from '@angular/router';
-
+import { DEFAULT_IMG_URL } from './default-img-url';
 
 @Injectable({
   providedIn: 'root'
@@ -56,12 +56,12 @@ export class UserService implements OnDestroy {
     })
   }
 
-  private userDefault(user: firebase.User): User {
+  private userDefault({email, uid, displayName, photoURL}: firebase.User): User {
     const data: User = {
-      username: user.email,
-      uid: user.uid,
-      name: user.displayName,
-      url: user.photoURL ?? 'https://firebasestorage.googleapis.com/v0/b/parkmebysaint.appspot.com/o/blank-profile.png?alt=media&token=4f775ff6-4520-4ecf-b2e0-04148fedaaa7',
+      username: email,
+      uid: uid,
+      name: displayName,
+      url: photoURL ?? DEFAULT_IMG_URL,
     }
     return data;
   }
@@ -88,14 +88,14 @@ export class UserService implements OnDestroy {
     }
 
     this.afAuth.auth.currentUser.updateProfile({ photoURL: url });
-    await this.profile
-      .pipe(take(1), pluck('uid'))
+    await this.userId$
+      .pipe(take(1))
       .toPromise()
       .then(uid => {
         if (uid) {
           this.db.doc(`profiles/${uid}`).update({
             displayName: name,
-            phonenumber: phonenumber ? phonenumber : '',
+            phonenumber: phonenumber ?? null,
             url: url,
           })
         };
@@ -109,12 +109,20 @@ export class UserService implements OnDestroy {
     return this.userId;
   }
 
+  get userId$(): Observable<string> {
+    return this.profile.pipe(pluck('uid'));
+  }
+
   get profile(): Observable<User> {
     return this.user$;
   }
 
   setNotHost(): void {
-    this.db.doc(`profiles/${this.userId}`).update({ host: false }).catch(console.log);
+    this.userId$
+      .pipe(take(1))
+      .subscribe(uid => {
+      this.db.doc(`profiles/${uid}`).update({ host: false }).catch(console.log);
+    });
   }
 
   async logout(): Promise<void> {

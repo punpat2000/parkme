@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, SimpleChanges } from '@angular/core';
 import { UserService } from '../core/services';
 import { AngularFireStorage } from '@angular/fire/storage';
 import { filter } from 'rxjs/operators';
@@ -57,9 +57,9 @@ export class ProfilePage implements OnInit, OnDestroy {
     this.url = null;
   }
 
-  uploadFile(event: FileList) {
+  uploadFile(event: File) {
     // The File object
-    const file = event.item(0)
+    const file = event;
 
     // Validation for Images Only
     if (file.type.split('/')[0] !== 'image') {
@@ -80,5 +80,8 @@ export class ProfilePage implements OnInit, OnDestroy {
     });
   }
   ngOnDestroy() {
+  }
+  test(event) {
+    console.log(event)
   }
 }

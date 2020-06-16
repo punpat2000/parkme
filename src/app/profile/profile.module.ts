@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { ProfilePageRoutingModule } from './profile-routing.module';
 import { ProfilePage } from './profile.page';
-import { PipesModule } from '../core/pipes.module';
+import { CoreModule } from '../core/core.module';
 
 @NgModule({
   declarations: [ProfilePage],
@@ -12,7 +12,7 @@ import { PipesModule } from '../core/pipes.module';
     CommonModule,
     FormsModule,
     IonicModule,
-    PipesModule,
+    CoreModule,
     ProfilePageRoutingModule,
   ],
 })

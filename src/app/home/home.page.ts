@@ -3,7 +3,7 @@ import { database } from 'firebase';
 import { UserService } from '../core/services';
 import { untilDestroyed } from 'ngx-take-until-destroy';
 import { filter } from 'rxjs/operators';
-
+import { Observable, Subject } from 'rxjs';
 
 @Component({
   selector: 'app-home',
@@ -12,6 +12,7 @@ import { filter } from 'rxjs/operators';
 })
 export class HomePage implements OnInit, OnDestroy {
 
+  lots$: Subject<database.DataSnapshot> = new Subject();
   lots = [];
   displayname: string;
   user: string;
@@ -35,6 +36,7 @@ export class HomePage implements OnInit, OnDestroy {
         }
       });
     this.displayCarpark();
+    this.getLotsInfo();
   }
   ngOnDestroy(): void {
   }
@@ -52,9 +54,20 @@ export class HomePage implements OnInit, OnDestroy {
     },
   };
 
+  getLotsInfo() {
+    database().ref(`lots`).on('value', data => {
+      if (data.exists){
+        this.lots$.next(data.val());
+      }
+    });
+    this.lots$.subscribe(data => {
+      console.log(data);
+    })
+  }
+
   displayCarpark(): void {
     database().ref('lots').on('value', resp => {
-      if (resp) {
+      if (resp.exists) {
         this.lots = [];
         resp.forEach(childSnapshot => {
           const lot = childSnapshot.val();
