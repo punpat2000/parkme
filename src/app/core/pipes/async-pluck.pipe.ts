@@ -7,13 +7,16 @@ import {
   WrappedValue,
   ɵstringify as stringify,
   ɵisObservable as isObservable,
-  ɵlooseIdentical as looseIdentical,
   Type
 } from '@angular/core';
 import { Observable, SubscriptionLike } from 'rxjs';
 import { pluck } from 'rxjs/operators';
 import { invalidPipeArgumentError, invalidObservablePropertyError } from './invalid-pipe-argument-error';
 import { isString } from 'lodash';
+
+function looseIdentical(a: any, b: any): boolean {
+  return a === b || typeof a === 'number' && typeof b === 'number' && isNaN(a) && isNaN(b);
+}
 
 class ObservableStrategy {
   constructor() { }

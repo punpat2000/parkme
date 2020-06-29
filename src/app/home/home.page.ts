@@ -60,9 +60,6 @@ export class HomePage implements OnInit, OnDestroy {
         this.lots$.next(data.val());
       }
     });
-    this.lots$.subscribe(data => {
-      console.log(data);
-    })
   }
 
   displayCarpark(): void {
