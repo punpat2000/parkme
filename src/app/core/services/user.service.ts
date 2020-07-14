@@ -86,7 +86,6 @@ export class UserService implements OnDestroy {
       console.log('error');
       return;
     }
-
     this.afAuth.auth.currentUser.updateProfile({ photoURL: url });
     await this.userId$
       .pipe(take(1))
