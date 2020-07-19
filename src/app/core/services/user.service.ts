@@ -69,14 +69,14 @@ export class UserService implements OnDestroy {
   ngOnDestroy() { }
 
 
-  async showAlert(header: string, message: string): Promise<void> {
+  async showAlert(header: string, message: string) {
     const alert = await this.alertController.create({
       header: header,
       message: message,
       buttons: ['Ok']
     });
-    await alert.present();
-    alert.onDidDismiss();
+    alert.present();
+    return await alert.onDidDismiss();
   }
 
 
