@@ -90,5 +90,8 @@
     "platforms": [
       "android"
     ]
-  }
+  },
+  "main": "index.js",
+  "repository": "https://github.com/punpat2000/parkme.git",
+  "license": "MIT"
 }
