@@ -29,7 +29,7 @@ export class HomePage implements OnInit, OnDestroy {
       )
       .subscribe(event => {
         if (event) {
-          this.displayname = event.displayName ? event.displayName : event.name;
+          this.displayname = event.displayName || event.name;
           this.user = event.uid;
         } else {
           console.log('error');

@@ -9,7 +9,7 @@ import { switchMap, take, shareReplay, filter } from 'rxjs/operators';
 import { untilDestroyed } from 'ngx-take-until-destroy';
 import * as _ from 'lodash';
 import { Router } from '@angular/router';
-import { DEFAULT_IMG_URL } from './default-img-url';
+import DEFAULT_IMG_URL from './default-img-url';
 
 @Injectable({
   providedIn: 'root'
