@@ -1,9 +1,9 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { database } from 'firebase';
 import { UserService } from '../core/services';
 import { filter } from 'rxjs/operators';
 import { Observable, Subject } from 'rxjs';
 import { UntilDestroy } from '@ngneat/until-destroy';
+import { AngularFireDatabase } from '@angular/fire/database';
 
 @UntilDestroy()
 @Component({
@@ -12,14 +12,14 @@ import { UntilDestroy } from '@ngneat/until-destroy';
   styleUrls: ['home.page.scss'],
 })
 export class HomePage implements OnInit, OnDestroy {
-
   lots$: Subject<database.DataSnapshot> = new Subject();
   lots = [];
   displayname: string;
   user: string;
 
   constructor(
-    private userService: UserService
+    private userService: UserService,
+    private db: AngularFireDatabase
   ) { }
 
   ngOnInit(): void {
@@ -55,7 +55,7 @@ export class HomePage implements OnInit, OnDestroy {
   };
 
   getLotsInfo() {
-    database().ref(`lots`).on('value', data => {
+    this.db.ref(`lots`).on('value', data => {
       if (data.exists){
         this.lots$.next(data.val());
       }
@@ -83,3 +83,5 @@ export class HomePage implements OnInit, OnDestroy {
     database().ref('/lots/' + key).update({ status: true, user: "" });
   }
 }
+
+// https://github.com/angular/angularfire/blob/master/docs/rtdb/lists.md
