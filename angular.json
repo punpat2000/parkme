@@ -15,6 +15,7 @@
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
             "aot": true,
+            "allowedCommonJsDependencies": ["lodash", "firebase"],
             "outputPath": "www",
             "index": "src/index.html",
             "main": "src/main.ts",
