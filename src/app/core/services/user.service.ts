@@ -106,8 +106,9 @@ export class UserService implements OnDestroy {
 			console.log('error');
 			return;
 		}
-		(await this.afAuth.currentUser).updateProfile({ photoURL: url });
-		await this.userId$
+    
+		const urlUpdate: Promise<unknown> = (await this.afAuth.currentUser).updateProfile({ photoURL: url });
+		const infoUpdate = this.userId$
 			.pipe(take(1))
 			.toPromise()
 			.then((uid) => {
@@ -118,8 +119,8 @@ export class UserService implements OnDestroy {
 						url: url,
 					});
 				}
-			})
-			.catch(console.log);
+			});
+    await Promise.all([urlUpdate, infoUpdate]);
 		this.showAlert('Done!', 'Your profile has been updated');
 		console.log('Profile updated');
 	}
