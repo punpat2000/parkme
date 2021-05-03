@@ -33,7 +33,7 @@
     "@ngneat/until-destroy": "^8.0.4",
     "@types/lodash": "^4.14.168",
     "cordova-android": "8.1.0",
-    "firebase": "^7.14.0",
+    "firebase": "^8.4.3",
     "firebaseui": "^4.5.0",
     "firebaseui-angular": "^5.1.2",
     "ionic-angular": "^3.9.10",
