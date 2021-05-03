@@ -2,12 +2,13 @@ import { Component, OnInit, OnDestroy, SimpleChanges } from '@angular/core';
 import { UserService } from '../core/services';
 import { AngularFireStorage } from '@angular/fire/storage';
 import { filter } from 'rxjs/operators';
-import { untilDestroyed } from 'ngx-take-until-destroy';
 import { User } from '../core/models';
 import { Observable } from 'rxjs';
 import { isNil } from 'lodash';
 import { shareReplay, take } from 'rxjs/operators';
+import { UntilDestroy } from '@ngneat/until-destroy';
 
+@UntilDestroy()
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.page.html',
@@ -30,7 +31,6 @@ export class ProfilePage implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.user$ = this.userService.profile
       .pipe(
-        untilDestroyed(this),
         filter(data => !isNil(data)),
         shareReplay(1)
       );

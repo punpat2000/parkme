@@ -1,6 +1,5 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { Subject, Observable } from 'rxjs';
-import { untilDestroyed } from 'ngx-take-until-destroy';
 import {
   Router,
   NavigationCancel,
@@ -8,7 +7,9 @@ import {
   NavigationError,
   NavigationStart,
 } from '@angular/router';
+import { UntilDestroy } from '@ngneat/until-destroy';
 
+@UntilDestroy()
 @Injectable({
   providedIn: 'root'
 })
@@ -24,7 +25,6 @@ export class LoadingEventService implements OnDestroy {
 
   private routerEventListener(): void {
     this.router.events
-      .pipe(untilDestroyed(this))
       .subscribe(event => {
         if (event instanceof NavigationStart) {
           this.show();

@@ -9,11 +9,12 @@ import { tap, pluck } from 'rxjs/operators';
 import { AlertController } from '@ionic/angular';
 import { Observable, of, ReplaySubject } from 'rxjs';
 import { switchMap, take, shareReplay, filter } from 'rxjs/operators';
-import { untilDestroyed } from 'ngx-take-until-destroy';
 import * as _ from 'lodash';
 import { Router } from '@angular/router';
 import DEFAULT_IMG_URL from './default-img-url';
+import { UntilDestroy } from '@ngneat/until-destroy';
 
+@UntilDestroy()
 @Injectable({
 	providedIn: 'root',
 })
@@ -34,11 +35,9 @@ export class UserService implements OnDestroy {
 	private userInitialize(): void {
 		this.user$ = this.afAuth.authState.pipe<
 			firebase.User,
-			firebase.User,
 			User,
 			User
 		>(
-			untilDestroyed(this),
 			tap((user) => (this.userId = user ? user.uid : null)),
 			switchMap((user) =>
 				user

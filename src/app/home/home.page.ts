@@ -1,10 +1,11 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { database } from 'firebase';
 import { UserService } from '../core/services';
-import { untilDestroyed } from 'ngx-take-until-destroy';
 import { filter } from 'rxjs/operators';
 import { Observable, Subject } from 'rxjs';
+import { UntilDestroy } from '@ngneat/until-destroy';
 
+@UntilDestroy()
 @Component({
   selector: 'app-home',
   templateUrl: 'home.page.html',
@@ -24,7 +25,6 @@ export class HomePage implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.userService.profile
       .pipe(
-        untilDestroyed(this),
         filter(data => !!data && typeof data !== 'undefined')
       )
       .subscribe(event => {

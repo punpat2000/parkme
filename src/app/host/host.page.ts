@@ -2,10 +2,11 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { UserService, CarparkService } from '../core/services';
 import { database } from 'firebase'
 import { AngularFireStorage } from '@angular/fire/storage';
-import { untilDestroyed } from 'ngx-take-until-destroy';
 import { filter } from 'rxjs/operators';
 import { isNil } from 'lodash';
+import { UntilDestroy } from '@ngneat/until-destroy';
 
+@UntilDestroy()
 @Component({
   selector: 'app-host',
   templateUrl: './host.page.html',
@@ -32,7 +33,6 @@ export class HostPage implements OnInit, OnDestroy {
   ngOnInit() {
     this.userService.profile
       .pipe(
-        untilDestroyed(this),
         filter(data => !isNil(data)),
       )
       .subscribe(resp => {
@@ -98,7 +98,7 @@ export class HostPage implements OnInit, OnDestroy {
     const path = `locationpictures/${new Date().getTime()}_${file.name}`;
     this.storage.upload(path, file).then(() => {
       const fileRef = this.storage.ref(path);
-      fileRef.getDownloadURL().pipe(untilDestroyed(this)).subscribe(url => {
+      fileRef.getDownloadURL().subscribe(url => {
         this.url = url;
         this.uploading = false;
         this.check();
