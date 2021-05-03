@@ -17,7 +17,8 @@
             "aot": true,
             "allowedCommonJsDependencies": [
               "lodash",
-              "firebase"
+              "firebase",
+              "dialog-polyfill"
             ],
             "outputPath": "www",
             "index": "src/index.html",
