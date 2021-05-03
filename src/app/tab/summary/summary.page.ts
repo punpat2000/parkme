@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { database } from 'firebase';
+import firebase from 'firebase';
 import { UserService } from 'src/app/core/services';
 import { filter } from 'rxjs/operators';
 import { Carpark } from 'src/app/core/models';
@@ -32,7 +32,7 @@ export class SummaryPage implements OnInit, OnDestroy {
 
 
   displayCarpark(): void {
-    database().ref('lots').on('value', resp => {
+    firebase.database().ref('lots').on('value', resp => {
       if (resp) {
         this.lots = [];
         resp.forEach(childSnapshot => {
@@ -50,7 +50,7 @@ export class SummaryPage implements OnInit, OnDestroy {
   }
 
   unbookCarpark(key: string): void {
-    database().ref('/lots/' + key).update({ status: true, user: "" }).catch(e => console.log(e));
+    firebase.database().ref('/lots/' + key).update({ status: true, user: "" }).catch(e => console.log(e));
   }
 
 }

@@ -3,7 +3,7 @@ import { UserService } from '../core/services';
 import { filter } from 'rxjs/operators';
 import { Observable, Subject } from 'rxjs';
 import { UntilDestroy } from '@ngneat/until-destroy';
-import { AngularFireDatabase } from '@angular/fire/database';
+import firebase from 'firebase';
 
 @UntilDestroy()
 @Component({
@@ -12,14 +12,13 @@ import { AngularFireDatabase } from '@angular/fire/database';
   styleUrls: ['home.page.scss'],
 })
 export class HomePage implements OnInit, OnDestroy {
-  lots$: Subject<database.DataSnapshot> = new Subject();
+  lots$: Subject<firebase.database.DataSnapshot> = new Subject();
   lots = [];
   displayname: string;
   user: string;
 
   constructor(
     private userService: UserService,
-    private db: AngularFireDatabase
   ) { }
 
   ngOnInit(): void {
@@ -55,7 +54,7 @@ export class HomePage implements OnInit, OnDestroy {
   };
 
   getLotsInfo() {
-    this.db.ref(`lots`).on('value', data => {
+    firebase.database().ref(`lots`).on('value', data => {
       if (data.exists){
         this.lots$.next(data.val());
       }
@@ -63,7 +62,7 @@ export class HomePage implements OnInit, OnDestroy {
   }
 
   displayCarpark(): void {
-    database().ref('lots').on('value', resp => {
+    firebase.database().ref('lots').on('value', resp => {
       if (resp.exists) {
         this.lots = [];
         resp.forEach(childSnapshot => {
@@ -77,10 +76,10 @@ export class HomePage implements OnInit, OnDestroy {
     });
   }
   bookCarpark(key: string) {
-    database().ref('/lots/' + key).update({ status: false, user: this.user });
+    firebase.database().ref('/lots/' + key).update({ status: false, user: this.user });
   }
   unbookCarpark(key: string) {
-    database().ref('/lots/' + key).update({ status: true, user: "" });
+    firebase.database().ref('/lots/' + key).update({ status: true, user: "" });
   }
 }
 

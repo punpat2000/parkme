@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { UserService, CarparkService } from '../core/services';
-import { database } from 'firebase'
+import firebase from 'firebase'
 import { AngularFireStorage } from '@angular/fire/storage';
 import { filter } from 'rxjs/operators';
 import { isNil } from 'lodash';
@@ -54,7 +54,7 @@ export class HostPage implements OnInit, OnDestroy {
   }
 
   getCarpark() {
-    database().ref('lots').on('value', resp => {
+    firebase.database().ref('lots').on('value', resp => {
       if (resp) {
         resp.forEach(childSnapshot => {
           const lot = childSnapshot.val();
@@ -107,13 +107,13 @@ export class HostPage implements OnInit, OnDestroy {
   }
 
   editCarpark() {
-    database().ref('/lots/' + this.info.key).update({ location: this.location, comment: this.comment, url: this.url });
+    firebase.database().ref('/lots/' + this.info.key).update({ location: this.location, comment: this.comment, url: this.url });
     this.userService.showAlert('Done!', 'Your location has been updated!');
     this.cannotSubmit = true;
   }
 
   deleteCarpark() {
-    database().ref('/lots/' + this.info.key).remove();
+    firebase.database().ref('/lots/' + this.info.key).remove();
     this.userService.setNotHost();
     this.location = "";
     this.comment = "";

@@ -13,6 +13,7 @@ import * as _ from 'lodash';
 import { Router } from '@angular/router';
 import DEFAULT_IMG_URL from './default-img-url';
 import { UntilDestroy } from '@ngneat/until-destroy';
+import firebase from 'firebase';
 
 @UntilDestroy()
 @Injectable({
@@ -33,11 +34,7 @@ export class UserService implements OnDestroy {
 	}
 
 	private userInitialize(): void {
-		this.user$ = this.afAuth.authState.pipe<
-			firebase.User,
-			User,
-			User
-		>(
+		this.user$ = this.afAuth.authState.pipe(
 			tap((user) => (this.userId = user ? user.uid : null)),
 			switchMap((user) =>
 				user

@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
 import { UserService } from './user.service';
 import { AngularFirestore } from '@angular/fire/firestore';
-import { database } from 'firebase';
+import firebase from 'firebase';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CarparkService {
+
   constructor(
     private userService: UserService,
     private db: AngularFirestore
@@ -14,7 +15,7 @@ export class CarparkService {
 
   async addCarpark(location: string, comment: string, url: string): Promise<void>{
     try{
-      const newData = database().ref('/lots').push();
+      const newData = firebase.database().ref('/lots').push();
       await Promise.all([
         newData.set({
           host: this.userService.uid,
