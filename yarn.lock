@@ -1567,12 +1567,12 @@
     tslib "^2.0.3"
     ws "^7.0.1"
 
-"@ionic/angular@^5.0.7":
-  version "5.6.4"
-  resolved "https://registry.yarnpkg.com/@ionic/angular/-/angular-5.6.4.tgz#bc7dabe2f7a34b0593b1d6d0142c250b60bc83e0"
-  integrity sha512-XlgOFMOsjJVp6hLpOPeymEbA0rHjjyx59fAtZgiBShAYXn6xcMVniqhcSkE3VyEOUmVGSIgMjNocYUWfuCZs+A==
+"@ionic/angular@^5.6.6":
+  version "5.6.6"
+  resolved "https://registry.yarnpkg.com/@ionic/angular/-/angular-5.6.6.tgz#dcbef601856f60945a91470969db7e85faf311ea"
+  integrity sha512-0psh2n4Y/3sx0e2Yj4WmNcukz0nrETEiJE6Fl4CldoB8QHZcXGi0hKrPAcbGSAF0+lAJ58+Z5Gp/HQVm/MQOMA==
   dependencies:
-    "@ionic/core" "5.6.4"
+    "@ionic/core" "5.6.6"
     tslib "^1.9.3"
 
 "@ionic/cli-framework@4.1.0":
@@ -1601,10 +1601,10 @@
     wrap-ansi "^6.0.0"
     write-file-atomic "^3.0.0"
 
-"@ionic/core@5.6.4":
-  version "5.6.4"
-  resolved "https://registry.yarnpkg.com/@ionic/core/-/core-5.6.4.tgz#49da080a4122241dd0e8ad5c08f9b8139e2a522b"
-  integrity sha512-fxCV/+0ibiaiBn1dsrrOmlLGJlTkqiG6IVXdLpPKimGdFLjy56olDvB5trlz9J5C/nHc7vR5MIiYC0qdTyX7og==
+"@ionic/core@5.6.6":
+  version "5.6.6"
+  resolved "https://registry.yarnpkg.com/@ionic/core/-/core-5.6.6.tgz#6392fdececca8c955c2309d05dfff8c467d8dc0b"
+  integrity sha512-EbVIXOTVVPxBo7hsarBpRSFNsQ22wBFtWkKmrmliieknG5LUkf5WZBpj4EENQhzYA6c+//7/nfhcD9pWgtAofA==
   dependencies:
     "@stencil/core" "^2.4.0"
     ionicons "^5.5.1"
