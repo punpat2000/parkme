@@ -262,10 +262,17 @@
   dependencies:
     tslib "^2.0.0"
 
-"@angular/fire@5.4.2", "@angular/fire@^5.4.2":
+"@angular/fire@5.4.2":
   version "5.4.2"
   resolved "https://registry.yarnpkg.com/@angular/fire/-/fire-5.4.2.tgz#fb2d54935de0d83789e940e5f57a6ffc0e1ef4eb"
   integrity sha512-QzB5d1wtqr9jxfsVNv2+569MlfK4/QrrpNy0IngOHdxS4FBbXqMOcx37iv1m2mzJv9zlGUddUX44IZP5Xfb3cw==
+
+"@angular/fire@^6.1.4":
+  version "6.1.4"
+  resolved "https://registry.yarnpkg.com/@angular/fire/-/fire-6.1.4.tgz#d3923a68336d7177abbb2676731d0aef566b9739"
+  integrity sha512-5u305XnBC041JMrAtczLa0bdprxw7RkXy4kgcRCisPI8maGuiN4XzlwNYX+plCHZCo4R0motxQom//tPTA2edQ==
+  dependencies:
+    tslib "^2.0.0"
 
 "@angular/forms@^10.0.1":
   version "10.2.5"
@@ -4772,10 +4779,12 @@ firebase@^7.14.0:
     "@firebase/storage" "0.3.43"
     "@firebase/util" "0.3.2"
 
-firebaseui-angular@^4.1.0:
-  version "4.1.0"
-  resolved "https://registry.yarnpkg.com/firebaseui-angular/-/firebaseui-angular-4.1.0.tgz#57bbcb9d1dd2dc738b95863e954009b9b7e1741a"
-  integrity sha512-dSbFqjuD/hGyx0pjArGlQE6aN1/tkiBTU6VKwNexT5aHLhQzWKBimsWIcT8jJalMur1Abc6lYsxMVurayYSO7w==
+firebaseui-angular@^5.1.2:
+  version "5.1.2"
+  resolved "https://registry.yarnpkg.com/firebaseui-angular/-/firebaseui-angular-5.1.2.tgz#a28c9178e68b59a8a83fb1ad6fc2ae48eb33929d"
+  integrity sha512-OjoRHdCV7LP5mqXYepgIB8jJBIGwQ/GvajUr79xda+k/KPdrApR5sFNFNb1rW6afbxW9Mx8Si3Bceqmbdyvb3A==
+  dependencies:
+    tslib "^2.0.0"
 
 firebaseui@^4.5.0:
   version "4.8.0"
