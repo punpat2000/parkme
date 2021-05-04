@@ -32,7 +32,6 @@
     "@ionic/angular": "^5.6.6",
     "@ngneat/until-destroy": "^8.0.4",
     "@types/lodash": "^4.14.168",
-    "cordova-android": "8.1.0",
     "firebase": "^8.4.3",
     "firebaseui": "^4.8.0",
     "firebaseui-angular": "^5.1.2",
@@ -86,9 +85,7 @@
       },
       "cordova-plugin-ionic-keyboard": {}
     },
-    "platforms": [
-      "android"
-    ]
+    "platforms": []
   },
   "main": "index.js",
   "repository": "https://github.com/punpat2000/parkme.git",
