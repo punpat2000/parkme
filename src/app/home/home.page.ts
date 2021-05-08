@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { UserService } from '../core/services';
 import { filter } from 'rxjs/operators';
 import { Observable, Subject } from 'rxjs';
@@ -11,7 +11,7 @@ import firebase from 'firebase';
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],
 })
-export class HomePage implements OnInit, OnDestroy {
+export class HomePage implements OnInit {
   lots$: Subject<firebase.database.DataSnapshot> = new Subject();
   lots = [];
   displayname: string;
@@ -36,8 +36,6 @@ export class HomePage implements OnInit, OnDestroy {
       });
     this.displayCarpark();
     this.getLotsInfo();
-  }
-  ngOnDestroy(): void {
   }
 
   sliderConfig = {

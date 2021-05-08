@@ -1,4 +1,4 @@
-import { Injectable, OnDestroy } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import {
 	AngularFirestore,
@@ -19,7 +19,7 @@ import firebase from 'firebase';
 @Injectable({
 	providedIn: 'root',
 })
-export class UserService implements OnDestroy {
+export class UserService {
 	private userId: string;
 	public name: string;
 	private user$: Observable<User>;
@@ -80,8 +80,6 @@ export class UserService implements OnDestroy {
 		return data;
 	}
 
-	ngOnDestroy() {}
-
 	async showAlert(header: string, message: string) {
 		const alert = await this.alertController.create({
 			header: header,
@@ -102,8 +100,10 @@ export class UserService implements OnDestroy {
 			console.log('error');
 			return;
 		}
-    
-		const urlUpdate: Promise<unknown> = (await this.afAuth.currentUser).updateProfile({ photoURL: url });
+
+		const urlUpdate: Promise<unknown> = (
+			await this.afAuth.currentUser
+		).updateProfile({ photoURL: url });
 		const infoUpdate = this.userId$
 			.pipe(take(1))
 			.toPromise()
@@ -116,7 +116,7 @@ export class UserService implements OnDestroy {
 					});
 				}
 			});
-    await Promise.all([urlUpdate, infoUpdate]);
+		await Promise.all([urlUpdate, infoUpdate]);
 		this.showAlert('Done!', 'Your profile has been updated');
 		console.log('Profile updated');
 	}

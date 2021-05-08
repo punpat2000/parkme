@@ -28,14 +28,9 @@
             "type": "element"
           }
         ],
-        "@angular-eslint/directive-selector": [
-          "error",
-          {
-            "prefix": "app",
-            "style": "camelCase",
-            "type": "attribute"
-          }
-        ]
+        "@angular-eslint/directive-selector": "off",
+        "@angular-eslint/component-class-suffix": "off",
+        "@angular-eslint/no-output-rename": "off"
       }
     },
     {
