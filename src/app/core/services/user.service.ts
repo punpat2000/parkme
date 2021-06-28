@@ -43,9 +43,8 @@ export class UserService {
 			),
 			shareReplay(1)
 		);
-		const onAuthStateChanged$: ReplaySubject<firebase.User> = new ReplaySubject<firebase.User>(
-			1
-		);
+		const onAuthStateChanged$: ReplaySubject<firebase.User> =
+			new ReplaySubject<firebase.User>(1);
 		this.afAuth.onAuthStateChanged(onAuthStateChanged$);
 		onAuthStateChanged$.pipe(filter((user) => !_.isNil(user))).subscribe({
 			next: this._checkUserDoc.bind(this),

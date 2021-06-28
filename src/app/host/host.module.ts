@@ -6,12 +6,7 @@ import { HostPageRoutingModule } from './host-routing.module';
 import { HostPage } from './host.page';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    FormsModule,
-    IonicModule,
-    HostPageRoutingModule
-  ],
-  declarations: [HostPage]
+	imports: [CommonModule, FormsModule, IonicModule, HostPageRoutingModule],
+	declarations: [HostPage],
 })
 export class HostPageModule {}
