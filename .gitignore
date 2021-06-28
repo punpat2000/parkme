@@ -24,7 +24,6 @@ package-lock.json
 /.sass-cache
 /.sourcemaps
 /.versions
-/.vscode
 /coverage
 /dist
 /node_modules
@@ -32,4 +31,5 @@ package-lock.json
 /plugins
 /www
 package-lock.json
+.vscode/*
 !.vscode/settings.json
