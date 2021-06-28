@@ -32,3 +32,4 @@ package-lock.json
 /plugins
 /www
 package-lock.json
+!.vscode/settings.json
