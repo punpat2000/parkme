@@ -1,15 +1,15 @@
 <ion-header>
-	<ion-toolbar>
-		<ion-title class="ion-text-center">Summary</ion-title>
-	</ion-toolbar>
+  <ion-toolbar>
+    <ion-title class="ion-text-center">Summary</ion-title>
+  </ion-toolbar>
 </ion-header>
 
 <ion-content class="paddle">
-	<div *ngFor="let lot of lots" class="w3-padding">
-		<app-card-element
-			[lot]="lot"
-			[uid]="uid"
-			(carUnbooked)="unbookCarpark($event)"
-		></app-card-element>
-	</div>
+  <div *ngFor="let lot of lots" class="w3-padding">
+    <app-card-element
+      [lot]="lot"
+      [uid]="uid"
+      (carUnbooked)="unbookCarpark($event)"
+    ></app-card-element>
+  </div>
 </ion-content>

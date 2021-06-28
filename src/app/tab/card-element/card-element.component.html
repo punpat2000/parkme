@@ -1,18 +1,18 @@
 <mat-card>
-	<mat-card-header>
-		<mat-card-title>
-			{{ lot.location }}
-		</mat-card-title>
-		<mat-card-subtitle *ngIf="uid === lot.user">
-			<span>Booked by you</span>
-		</mat-card-subtitle>
-	</mat-card-header>
-	<mat-card-content>
-		<p>{{ lot.comment }}</p>
-	</mat-card-content>
-	<mat-card-actions *ngIf="uid === lot.host">
-		<button mat-button color="warn" (click)="unbookCarpark(lot.key)">
-			remove user
-		</button>
-	</mat-card-actions>
+  <mat-card-header>
+    <mat-card-title>
+      {{ lot.location }}
+    </mat-card-title>
+    <mat-card-subtitle *ngIf="uid === lot.user">
+      <span>Booked by you</span>
+    </mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content>
+    <p>{{ lot.comment }}</p>
+  </mat-card-content>
+  <mat-card-actions *ngIf="uid === lot.host">
+    <button mat-button color="warn" (click)="unbookCarpark(lot.key)">
+      remove user
+    </button>
+  </mat-card-actions>
 </mat-card>

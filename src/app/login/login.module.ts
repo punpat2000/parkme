@@ -7,13 +7,13 @@ import { LoginPage } from './login.page';
 import { FirebaseUIModule } from 'firebaseui-angular';
 
 @NgModule({
-	imports: [
-		CommonModule,
-		FormsModule,
-		IonicModule,
-		FirebaseUIModule,
-		LoginPageRoutingModule,
-	],
-	declarations: [LoginPage],
+  imports: [
+    CommonModule,
+    FormsModule,
+    IonicModule,
+    FirebaseUIModule,
+    LoginPageRoutingModule,
+  ],
+  declarations: [LoginPage],
 })
 export class LoginPageModule {}

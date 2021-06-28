@@ -13,8 +13,8 @@ import { AngularFireModule } from '@angular/fire';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { AngularFireAuthGuard } from '@angular/fire/auth-guard';
 import {
-	AngularFirestore,
-	AngularFirestoreModule,
+  AngularFirestore,
+  AngularFirestoreModule,
 } from '@angular/fire/firestore';
 import { AngularFireStorageModule } from '@angular/fire/storage';
 import { ServiceWorkerModule } from '@angular/service-worker';
@@ -23,31 +23,31 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ProgressBarModule } from './progress-bar/progress-bar.module';
 
 @NgModule({
-	declarations: [AppComponent],
-	entryComponents: [],
-	imports: [
-		BrowserModule,
-		FormsModule,
-		IonicModule.forRoot(),
-		AppRoutingModule,
-		AngularFireModule.initializeApp(environment.firebase),
-		AngularFireAuthModule,
-		ProgressBarModule,
-		FirebaseUIModule.forRoot(FIREBASEUI_AUTH_CONFIG),
-		AngularFirestoreModule,
-		AngularFireStorageModule,
-		ServiceWorkerModule.register('ngsw-worker.js', {
-			enabled: environment.production,
-		}),
-		BrowserAnimationsModule,
-	],
-	providers: [
-		StatusBar,
-		SplashScreen,
-		{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
-		AngularFireAuthGuard,
-		AngularFirestore,
-	],
-	bootstrap: [AppComponent],
+  declarations: [AppComponent],
+  entryComponents: [],
+  imports: [
+    BrowserModule,
+    FormsModule,
+    IonicModule.forRoot(),
+    AppRoutingModule,
+    AngularFireModule.initializeApp(environment.firebase),
+    AngularFireAuthModule,
+    ProgressBarModule,
+    FirebaseUIModule.forRoot(FIREBASEUI_AUTH_CONFIG),
+    AngularFirestoreModule,
+    AngularFireStorageModule,
+    ServiceWorkerModule.register('ngsw-worker.js', {
+      enabled: environment.production,
+    }),
+    BrowserAnimationsModule,
+  ],
+  providers: [
+    StatusBar,
+    SplashScreen,
+    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
+    AngularFireAuthGuard,
+    AngularFirestore,
+  ],
+  bootstrap: [AppComponent],
 })
 export class AppModule {}

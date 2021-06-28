@@ -5,7 +5,7 @@ import { UploadButtonDirective } from './directives/download.directive';
 
 const core = [NonNullPipe, AsyncPluckPipe, UploadButtonDirective];
 @NgModule({
-	declarations: core,
-	exports: core,
+  declarations: core,
+  exports: core,
 })
 export class CoreModule {}

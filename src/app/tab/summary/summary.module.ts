@@ -12,14 +12,14 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 
 @NgModule({
-	imports: [
-		CommonModule,
-		FormsModule,
-		IonicModule,
-		SummaryPageRoutingModule,
-		MatCardModule,
-		MatButtonModule,
-	],
-	declarations: [SummaryPage, CardElementComponent],
+  imports: [
+    CommonModule,
+    FormsModule,
+    IonicModule,
+    SummaryPageRoutingModule,
+    MatCardModule,
+    MatButtonModule,
+  ],
+  declarations: [SummaryPage, CardElementComponent],
 })
 export class SummaryPageModule {}

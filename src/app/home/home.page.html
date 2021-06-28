@@ -1,58 +1,58 @@
 <ion-header>
-	<ion-toolbar>
-		<ion-title class="ion-text-center"> ParkME </ion-title>
-	</ion-toolbar>
+  <ion-toolbar>
+    <ion-title class="ion-text-center"> ParkME </ion-title>
+  </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding">
-	<ion-item>
-		<ion-label class="ion-text-center">Welcome, {{ displayname }}!</ion-label>
-	</ion-item>
-	<div>
-		<ion-slides [options]="sliderConfig">
-			<ion-slide *ngFor="let lot of lots">
-				<ion-card-content fullscreen>
-					<img *ngIf="lot.url" [src]="lot.url" />
-					<ion-card-title>
-						<ion-label>Location: {{ lot.location }}</ion-label>
-					</ion-card-title>
-					<ion-card-content> {{ lot.comment }} </ion-card-content>
+  <ion-item>
+    <ion-label class="ion-text-center">Welcome, {{ displayname }}!</ion-label>
+  </ion-item>
+  <div>
+    <ion-slides [options]="sliderConfig">
+      <ion-slide *ngFor="let lot of lots">
+        <ion-card-content fullscreen>
+          <img *ngIf="lot.url" [src]="lot.url" />
+          <ion-card-title>
+            <ion-label>Location: {{ lot.location }}</ion-label>
+          </ion-card-title>
+          <ion-card-content> {{ lot.comment }} </ion-card-content>
 
-					<ion-button
-						*ngIf="lot.host === this.user; else ok"
-						color="light"
-						expand="full"
-						>this is your location!
-					</ion-button>
-					<ng-template #ok>
-						<ion-button
-							*ngIf="!lot.status && !(lot.user === this.user); else notuser"
-							color="light"
-							expand="full"
-						>
-							booked</ion-button
-						>
-						<ng-template #notuser>
-							<ion-button
-								expand="full"
-								*ngIf="lot.status; else booked"
-								color="success"
-								(click)="bookCarpark(lot.key)"
-							>
-								Book</ion-button
-							>
-							<ng-template #booked>
-								<ion-button
-									expand="full"
-									color="danger"
-									(click)="unbookCarpark(lot.key)"
-									>Unbook</ion-button
-								>
-							</ng-template>
-						</ng-template>
-					</ng-template>
-				</ion-card-content>
-			</ion-slide>
-		</ion-slides>
-	</div>
+          <ion-button
+            *ngIf="lot.host === this.user; else ok"
+            color="light"
+            expand="full"
+            >this is your location!
+          </ion-button>
+          <ng-template #ok>
+            <ion-button
+              *ngIf="!lot.status && !(lot.user === this.user); else notuser"
+              color="light"
+              expand="full"
+            >
+              booked</ion-button
+            >
+            <ng-template #notuser>
+              <ion-button
+                expand="full"
+                *ngIf="lot.status; else booked"
+                color="success"
+                (click)="bookCarpark(lot.key)"
+              >
+                Book</ion-button
+              >
+              <ng-template #booked>
+                <ion-button
+                  expand="full"
+                  color="danger"
+                  (click)="unbookCarpark(lot.key)"
+                  >Unbook</ion-button
+                >
+              </ng-template>
+            </ng-template>
+          </ng-template>
+        </ion-card-content>
+      </ion-slide>
+    </ion-slides>
+  </div>
 </ion-content>
