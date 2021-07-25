@@ -1,0 +1,26 @@
+name: Docker Image CI 💾
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build_and_push:
+    runs-on: ubuntu-latest
+    name: Build and Push to Docker Hub
+    steps:
+      - name: Checkout 🔎
+        uses: actions/checkout@v2
+
+      - name: Login to DockerHub 🔑
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build the stack 🛠️
+        run: docker build -t punpat2000/parkme .
+
+      - name: Push to Docker Hub ☁️
+        run: docker push punpat2000/parkme

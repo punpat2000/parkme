@@ -1,6 +1,7 @@
 www
 .vscode
 .firebase
+.git
 resources
 e2e
 node_modules
