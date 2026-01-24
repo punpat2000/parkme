@@ -1,0 +1,20 @@
+FROM node:14-alpine
+
+WORKDIR /usr/src/app
+
+# Copy package files
+COPY package.json yarn.lock ./
+
+# Expose Angular dev server port
+EXPOSE 4200
+
+# Create entrypoint script that installs deps if needed, then starts dev server
+RUN echo '#!/bin/sh' > /entrypoint.sh && \
+  echo 'if [ ! -d "node_modules" ] || [ -z "$(ls -A node_modules)" ]; then' >> /entrypoint.sh && \
+  echo '  echo "Installing dependencies..."' >> /entrypoint.sh && \
+  echo '  yarn install' >> /entrypoint.sh && \
+  echo 'fi' >> /entrypoint.sh && \
+  echo 'exec yarn start --host 0.0.0.0 --disable-host-check' >> /entrypoint.sh && \
+  chmod +x /entrypoint.sh
+
+ENTRYPOINT ["/entrypoint.sh"]

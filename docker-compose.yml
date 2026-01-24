@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: parkme-dev
+    ports:
+      - "4200:4200"
+    volumes:
+      # Mount source code for live reloading
+      - ./src:/usr/src/app/src
+      - ./angular.json:/usr/src/app/angular.json
+      - ./package.json:/usr/src/app/package.json
+      - ./yarn.lock:/usr/src/app/yarn.lock
+      - ./tsconfig.json:/usr/src/app/tsconfig.json
+      - ./tsconfig.app.json:/usr/src/app/tsconfig.app.json
+      - ./tsconfig.spec.json:/usr/src/app/tsconfig.spec.json
+      - ./karma.conf.js:/usr/src/app/karma.conf.js
+      - ./ionic.config.json:/usr/src/app/ionic.config.json
+      - ./config.xml:/usr/src/app/config.xml
+      - ./ngsw-config.json:/usr/src/app/ngsw-config.json
+      - ./firebase.json:/usr/src/app/firebase.json
+      # Mount node_modules so IDE can access them (container will populate it)
+      - ./node_modules:/usr/src/app/node_modules
+      # Exclude build output
+      - /usr/src/app/www
+    environment:
+      - NODE_ENV=development
+    stdin_open: true
+    tty: true
